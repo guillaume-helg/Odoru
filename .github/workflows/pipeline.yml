@@ -1,0 +1,140 @@
+name: Odoru CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, 1-feat-back-office-member-management ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    name: Compile and Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 26
+        uses: actions/setup-java@v4
+        with:
+          java-version: '26'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Compile and Generate OpenAPI
+        # On utilise spring-boot:start pour permettre au plugin openapi de requêter l'app en local
+        run: |
+          cd odoru-member-service
+          mvn clean verify -DskipTests spring-boot:start springdoc-openapi:generate spring-boot:stop
+
+      - name: Upload OpenAPI Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi-spec
+          path: odoru-member-service/target/openapi.json
+
+  test:
+    name: Unit Tests & Coverage
+    needs: build
+    runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 26
+        uses: actions/setup-java@v4
+        with:
+          java-version: '26'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run Tests with Coverage
+        run: |
+          cd odoru-member-service
+          mvn test jacoco:report
+
+  lint:
+    name: Checkstyle Lint
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 26
+        uses: actions/setup-java@v4
+        with:
+          java-version: '26'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run Checkstyle
+        run: |
+          cd odoru-member-service
+          mvn checkstyle:check
+
+  deploy-swagger:
+    name: Deploy Swagger UI to GitHub Pages
+    needs: [test, lint]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download OpenAPI Spec
+        uses: actions/download-artifact@v4
+        with:
+          name: openapi-spec
+          path: .
+
+      - name: Setup Swagger UI
+        run: |
+          mkdir public
+          cp openapi.json public/
+          cat > public/index.html <<EOF
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <title>Odoru API Documentation</title>
+            <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
+            <style>
+              html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
+              *, *:before, *:after { box-sizing: inherit; }
+              body { margin: 0; background: #fafafa; }
+            </style>
+          </head>
+          <body>
+            <div id="swagger-ui"></div>
+            <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+            <script>
+              window.onload = function() {
+                const ui = SwaggerUIBundle({
+                  url: "openapi.json",
+                  dom_id: '#swagger-ui',
+                  deepLinking: true,
+                  presets: [ SwaggerUIBundle.presets.apis ],
+                  layout: "BaseLayout"
+                });
+              };
+            </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
