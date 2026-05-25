@@ -24,19 +24,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 public class AttendanceLog {
 
-  /** The unique identifier of the log. */
   @Id
   private String id;
 
-  /** The unique identifier of the member. */
   @NotBlank(message = "Member ID is required")
   private String memberId;
 
-  /** The unique identifier of the lesson. */
   @NotBlank(message = "Lesson ID is required")
   private String lessonId;
 
-  /** The timestamp when the badge was swiped. */
   @NotNull(message = "Timestamp is required")
   private LocalDateTime timestamp;
 }

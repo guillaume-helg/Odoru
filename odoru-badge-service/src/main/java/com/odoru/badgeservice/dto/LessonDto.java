@@ -17,24 +17,11 @@ import lombok.Setter;
 @Builder
 public class LessonDto {
 
-  /** The unique identifier of the lesson. */
   private String id;
-
-  /** The title of the lesson. */
   private String title;
-
-  /** The target level of the lesson. */
   private int targetLevel;
-
-  /** The date and time when the lesson starts. */
   private LocalDateTime dateTime;
-
-  /** The duration of the lesson in minutes. */
   private int duration;
-
-  /** The identifier of the teacher. */
   private String teacherId;
-
-  /** The location where the lesson takes place. */
   private String location;
 }

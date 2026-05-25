@@ -21,16 +21,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 public class BadgeAssociation {
 
-  /** The unique identifier of the association. */
   @Id
   private String id;
 
-  /** The unique identifier of the member. */
   @NotBlank(message = "Member ID is required")
   @Indexed(unique = true)
   private String memberId;
 
-  /** The unique random badge number. */
   @NotBlank(message = "Badge number is required")
   @Indexed(unique = true)
   private String badgeNumber;

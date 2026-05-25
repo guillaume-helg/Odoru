@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import com.odoru.badgeservice.config.RabbitMQConfig;
+import com.odoru.badgeservice.dto.AttendanceScanRequest;
 
 /**
  * Controller class managing REST API endpoints for badge allocation.
@@ -33,16 +36,9 @@ import org.springframework.web.bind.annotation.RestController;
 )
 public class BadgeController {
 
-  /** Badge service dependency. */
   private final BadgeService badgeService;
+  private final RabbitTemplate rabbitTemplate;
 
-  /**
-   * Associates a badge number with a member.
-   *
-   * @param memberId the member identifier
-   * @param badgeNumber the unique random badge number
-   * @return the saved association
-   */
   @PostMapping("/associate")
   @PreAuthorize("hasRole('SECRETARY')")
   @Operation(
@@ -67,12 +63,6 @@ public class BadgeController {
         badgeService.associateBadge(memberId, badgeNumber));
   }
 
-  /**
-   * Dissociates any badge linked to a member.
-   *
-   * @param memberId the member identifier
-   * @return an empty response (204 No Content)
-   */
   @PostMapping("/dissociate/{memberId}")
   @PreAuthorize("hasRole('SECRETARY')")
   @Operation(
@@ -94,41 +84,33 @@ public class BadgeController {
     return ResponseEntity.noContent().build();
   }
 
-  /**
-   * Simulates a badge swiping event at a course session.
-   *
-   * @param badgeNumber the swiped badge number
-   * @param lessonId the lesson identifier
-   * @return the saved attendance log
-   */
   @PostMapping("/scan")
   @Operation(
       summary = "Simulate a badge scan",
-      description = "Logs student presence when a badge is swiped at a reader."
+      description = "Queues a student presence scan event for asynchronous "
+          + "validation and processing."
   )
   @ApiResponses({
-      @ApiResponse(responseCode = "201",
-          description = "Attendance logged successfully"),
-      @ApiResponse(responseCode = "400",
-          description = "Unrecognized badge or invalid lesson")
+      @ApiResponse(responseCode = "202",
+          description = "Badge scan received and queued successfully")
   })
-  public ResponseEntity<AttendanceLog> scanBadge(
+  public ResponseEntity<Void> scanBadge(
       @Parameter(description = "The swiped badge number", required = true)
       @RequestParam final String badgeNumber,
       @Parameter(description = "The unique identifier of the lesson",
           required = true)
       @RequestParam final String lessonId) {
-    return new ResponseEntity<>(
-        badgeService.logAttendance(badgeNumber, lessonId),
-        HttpStatus.CREATED);
+    final AttendanceScanRequest scanRequest = AttendanceScanRequest.builder()
+        .badgeNumber(badgeNumber)
+        .lessonId(lessonId)
+        .build();
+    rabbitTemplate.convertAndSend(
+        RabbitMQConfig.ATTENDANCE_EXCHANGE,
+        RabbitMQConfig.ATTENDANCE_ROUTING_KEY,
+        scanRequest);
+    return ResponseEntity.accepted().build();
   }
 
-  /**
-   * Retrieves all lessons attended by a student.
-   *
-   * @param studentId the student identifier
-   * @return the list of lessons attended
-   */
   @GetMapping("/attendance/student/{studentId}")
   @Operation(
       summary = "Get attended lessons",
@@ -148,12 +130,6 @@ public class BadgeController {
     return ResponseEntity.ok(badgeService.getStudentLessons(studentId));
   }
 
-  /**
-   * Retrieves the list of student IDs present at a specific lesson.
-   *
-   * @param lessonId the lesson identifier
-   * @return the list of student IDs present
-   */
   @GetMapping("/attendance/lesson/{lessonId}")
   @Operation(
       summary = "Get lesson attendees",

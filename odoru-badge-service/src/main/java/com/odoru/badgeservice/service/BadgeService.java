@@ -21,24 +21,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BadgeService {
 
-  /** Badge association repository. */
   private final BadgeAssociationRepository badgeAssociationRepository;
-
-  /** Attendance log repository. */
   private final AttendanceLogRepository attendanceLogRepository;
-
-  /** Member service client. */
   private final MemberClient memberClient;
-
-  /** Lesson service client. */
   private final LessonClient lessonClient;
 
   /**
-   * Associates a badge with a member after verifying they exist.
+   * Associates a badge with a member.
    *
-   * @param memberId the unique identifier of the member
-   * @param badgeNumber the unique random badge number
-   * @return the saved badge association
+   * @throws IllegalArgumentException if the badge number is already assigned to someone else
    */
   public BadgeAssociation associateBadge(
       final String memberId, final String badgeNumber) {
@@ -68,7 +59,7 @@ public class BadgeService {
   /**
    * Dissociates a badge from its owner.
    *
-   * @param memberId the unique identifier of the member
+   * @throws IllegalArgumentException if no badge association exists for the member
    */
   public void dissociateBadge(final String memberId) {
     final BadgeAssociation association = badgeAssociationRepository
@@ -81,9 +72,7 @@ public class BadgeService {
   /**
    * Logs a student attendance via badge swiping at a lesson.
    *
-   * @param badgeNumber the unique random badge number
-   * @param lessonId the unique identifier of the lesson
-   * @return the logged attendance
+   * @throws IllegalArgumentException if the badge number is unrecognized
    */
   public AttendanceLog logAttendance(
       final String badgeNumber, final String lessonId) {
@@ -115,12 +104,6 @@ public class BadgeService {
     return attendanceLogRepository.save(log);
   }
 
-  /**
-   * Retrieves all lessons attended by a student.
-   *
-   * @param studentId the unique identifier of the student
-   * @return the list of lessons attended
-   */
   public List<LessonDto> getStudentLessons(final String studentId) {
     // Verify student exists
     memberClient.verifyMemberExists(studentId);
@@ -139,12 +122,6 @@ public class BadgeService {
     return lessons;
   }
 
-  /**
-   * Retrieves the list of student IDs present at a specific lesson.
-   *
-   * @param lessonId the unique identifier of the lesson
-   * @return the list of student IDs
-   */
   public List<String> getLessonAttendees(final String lessonId) {
     // 1. Verify lesson exists in Lesson Service
     lessonClient.getLessonById(lessonId);

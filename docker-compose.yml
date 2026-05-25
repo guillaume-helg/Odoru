@@ -17,6 +17,12 @@ services:
     volumes:
       - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
   member-service:
     build:
       context: ./odoru-member-service
@@ -75,11 +81,14 @@ services:
       - LESSON_SERVICE_HOST=lesson-service
       - KEYCLOAK_HOST=keycloak
       - KEYCLOAK_PORT=8080
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
     depends_on:
       - mongodb
       - member-service
       - lesson-service
       - keycloak
+      - rabbitmq
 
   stats-service:
     build:

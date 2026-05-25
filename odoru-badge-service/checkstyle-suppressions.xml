@@ -6,4 +6,6 @@
   <!-- Spring Boot main class is not a utility class -->
   <suppress checks="HideUtilityClassConstructor"
             files="BadgeApplication\.java"/>
+  <!-- Test classes don't need strict style enforcement -->
+  <suppress checks=".*" files=".*Test\.java"/>
 </suppressions>

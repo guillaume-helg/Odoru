@@ -17,20 +17,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LessonService {
 
-  /** Minimum days in advance to schedule a lesson. */
   private static final int MIN_DAYS_IN_ADVANCE = 7;
 
-  /** Lesson repository. */
   private final LessonRepository lessonRepository;
-
-  /** Member client. */
   private final MemberClient memberClient;
 
   /**
    * Creates a new lesson after validating all business rules.
    *
-   * @param lesson the lesson to create
-   * @return the saved lesson
+   * @throws IllegalArgumentException if date is too close or assigned member is not a teacher/not qualified
    */
   public Lesson createLesson(final Lesson lesson) {
     // 1. Date check: must be >= 7 days in advance
@@ -59,31 +54,14 @@ public class LessonService {
     return lessonRepository.save(lesson);
   }
 
-  /**
-   * Retrieves all lessons.
-   *
-   * @return all lessons
-   */
   public List<Lesson> getAllLessons() {
     return lessonRepository.findAll();
   }
 
-  /**
-   * Retrieves all lessons matching a specific target level.
-   *
-   * @param level the target level
-   * @return list of matching lessons
-   */
   public List<Lesson> getLessonsByLevel(final int level) {
     return lessonRepository.findByTargetLevel(level);
   }
 
-  /**
-   * Retrieves all lessons taught by a specific teacher.
-   *
-   * @param teacherId the unique identifier of the teacher
-   * @return list of lessons taught by the teacher
-   */
   public List<Lesson> getLessonsByTeacher(final String teacherId) {
     return lessonRepository.findByTeacherId(teacherId);
   }
@@ -92,9 +70,6 @@ public class LessonService {
    * Retrieves all lessons a student is enrolled in de facto.
    * "Les élèves d’un niveau X sont de facto inscrits à tous les cours de
    * niveau X."
-   *
-   * @param studentId the unique identifier of the student
-   * @return list of lessons for the student's level
    */
   public List<Lesson> getLessonsForStudent(final String studentId) {
     final MemberDto student = memberClient.getMemberById(studentId);
@@ -102,10 +77,6 @@ public class LessonService {
   }
 
   /**
-   * Finds a lesson by its ID. Throws an exception if the lesson is not found.
-   *
-   * @param id the unique identifier of the lesson
-   * @return the lesson entity
    * @throws RuntimeException if the lesson is not found
    */
   public Lesson getLessonById(final String id) {

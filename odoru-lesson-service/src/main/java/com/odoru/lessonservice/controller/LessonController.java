@@ -33,15 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 )
 public class LessonController {
 
-  /** Lesson service dependency. */
   private final LessonService lessonService;
 
-  /**
-   * Schedules a new lesson in the system.
-   *
-   * @param lesson the lesson details
-   * @return the created lesson entity
-   */
   @PostMapping
   @PreAuthorize("hasRole('TEACHER')")
   @Operation(
@@ -61,13 +54,6 @@ public class LessonController {
         lessonService.createLesson(lesson), HttpStatus.CREATED);
   }
 
-  /**
-   * Retrieves registered lessons, optionally filtered by level or teacher ID.
-   *
-   * @param level optional target level filter
-   * @param teacherId optional teacher filter
-   * @return the list of lessons
-   */
   @GetMapping
   @Operation(
       summary = "Get lessons",
@@ -90,12 +76,6 @@ public class LessonController {
     return ResponseEntity.ok(lessonService.getAllLessons());
   }
 
-  /**
-   * Retrieves the scheduled lessons for a specific teacher.
-   *
-   * @param teacherId the teacher identifier
-   * @return the list of lessons taught by this teacher
-   */
   @GetMapping("/teacher/{teacherId}")
   @Operation(
       summary = "Get lessons taught by a teacher",
@@ -115,12 +95,6 @@ public class LessonController {
     return ResponseEntity.ok(lessonService.getLessonsByTeacher(teacherId));
   }
 
-  /**
-   * Retrieves lessons registered to a student (by matching target level).
-   *
-   * @param studentId the student identifier
-   * @return the list of lessons for this student
-   */
   @GetMapping("/student/{studentId}")
   @Operation(
       summary = "Get lessons for a student",
@@ -140,12 +114,6 @@ public class LessonController {
     return ResponseEntity.ok(lessonService.getLessonsForStudent(studentId));
   }
 
-  /**
-   * Retrieves a specific lesson by its ID.
-   *
-   * @param id the unique identifier of the lesson
-   * @return the lesson entity
-   */
   @GetMapping("/{id}")
   @Operation(
       summary = "Get lesson by ID",
@@ -165,4 +133,3 @@ public class LessonController {
     return ResponseEntity.ok(lessonService.getLessonById(id));
   }
 }
-
