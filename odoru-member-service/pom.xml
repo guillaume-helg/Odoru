@@ -15,6 +15,9 @@
 	<description>Odoru Member Management Service</description>
 	<properties>
 		<java.version>26</java.version>
+		<lombok.version>1.18.46</lombok.version>
+		<mockito.version>5.23.0</mockito.version>
+		<byte-buddy.version>1.18.8</byte-buddy.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -38,6 +41,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>1.18.46</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -49,6 +53,20 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.13.0</version>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -63,13 +81,15 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
+				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.6.0</version>
 				<configuration>
 					<configLocation>google_checks.xml</configLocation>
 					<consoleOutput>true</consoleOutput>
 					<failsOnError>true</failsOnError>
 					<linkXRef>false</linkXRef>
+					<argLine>${jacoco.agent}</argLine>
+
 				</configuration>
 				<executions>
 					<execution>
@@ -89,12 +109,27 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.12</version>
+				<version>0.8.13</version>
+				<configuration>
+					<excludes>
+						<!-- Exclude Mockito-generated classes -->
+						<exclude>**/*$Mock*</exclude>
+						<exclude>**/*$Mockito*</exclude>
+						<!-- Exclude ByteBuddy generated classes -->
+						<exclude>**/net/bytebuddy/**</exclude>
+						<!-- Exclude Java internal tools -->
+						<exclude>**/com/sun/tools/**</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
+						<id>prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
+						<configuration>
+							<propertyName>jacoco.agent</propertyName>
+						</configuration>
 					</execution>
 					<execution>
 						<id>report</id>
