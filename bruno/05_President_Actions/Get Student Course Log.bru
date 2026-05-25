@@ -1,0 +1,15 @@
+meta {
+  name: Get Student Course Log
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{gateway_url}}/api/stats/students/{{created_student_id}}/attendance
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{president_token}}
+}

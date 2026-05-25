@@ -1,0 +1,24 @@
+meta {
+  name: Get Token Student
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{keycloak_url}}/realms/odoru/protocol/openid-connect/token
+  body: x-www-form-urlencoded
+  auth: none
+}
+
+body:x-www-form-urlencoded {
+  client_id: odoru-services
+  grant_type: password
+  username: student
+  password: admin
+}
+
+script:post-response {
+  if (res.status === 200) {
+    bru.setEnvVar("student_token", res.body.access_token);
+  }
+}

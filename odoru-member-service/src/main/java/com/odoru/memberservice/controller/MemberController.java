@@ -15,6 +15,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -100,6 +101,7 @@ public final class MemberController {
   }
 
   @PatchMapping("/{id}/expertise")
+  @PreAuthorize("hasRole('SECRETARY')")
   @Operation(summary = "Update expertise level (1-5)")
   @ApiResponses({
       @ApiResponse(responseCode = "200",
@@ -120,6 +122,7 @@ public final class MemberController {
   }
 
   @PatchMapping("/{id}/registration-status")
+  @PreAuthorize("hasRole('SECRETARY')")
   @Operation(summary = "Update registration status",
       description = "Update payment, certificate, and validation flags")
   @ApiResponses({
@@ -140,6 +143,7 @@ public final class MemberController {
   }
 
   @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole('SECRETARY')")
   @Operation(summary = "Delete a member")
   @ApiResponses({
       @ApiResponse(responseCode = "204",
@@ -153,4 +157,25 @@ public final class MemberController {
     memberService.deleteMember(id);
     return ResponseEntity.noContent().build();
   }
+
+  @PatchMapping("/{id}/role")
+  @PreAuthorize("hasRole('SECRETARY')")
+  @Operation(summary = "Update member role")
+  @ApiResponses({
+      @ApiResponse(responseCode = "200",
+          description = "Member role successfully updated"),
+      @ApiResponse(responseCode = "400",
+          description = "Invalid role value"),
+      @ApiResponse(responseCode = "404",
+          description = "Member not found with the specified ID")
+  })
+  public ResponseEntity<Member> updateRole(
+      @Parameter(description = "The unique identifier of the member",
+          required = true)
+      @PathVariable final String id,
+      @Parameter(description = "The new role to assign", required = true)
+      @RequestParam final MemberRole role) {
+    return ResponseEntity.ok(memberService.updateMemberRole(id, role));
+  }
 }
+

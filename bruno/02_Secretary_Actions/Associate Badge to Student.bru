@@ -1,0 +1,15 @@
+meta {
+  name: Associate Badge to Student
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{gateway_url}}/api/badges/associate?memberId={{created_student_id}}&badgeNumber=BADGE-123-456
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{secretary_token}}
+}

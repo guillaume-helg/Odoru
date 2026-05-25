@@ -1,0 +1,27 @@
+meta {
+  name: Validate Registration
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{gateway_url}}/api/members/{{created_student_id}}/registration-status
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{secretary_token}}
+}
+
+body:json {
+  {
+    "feePaid": true,
+    "medicalCertificateProvided": true,
+    "registrationValidated": true
+  }
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Get Student Lessons
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{gateway_url}}/api/badges/attendance/student/{{created_student_id}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{student_token}}
+}

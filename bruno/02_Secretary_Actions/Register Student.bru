@@ -1,0 +1,32 @@
+meta {
+  name: Register Student
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{gateway_url}}/api/members/signup
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "dancestudent",
+    "email": "student@odoru.com",
+    "firstName": "John",
+    "lastName": "Doe",
+    "expertiseLevel": 3,
+    "address": {
+      "street": "123 Dance Avenue",
+      "city": "Paris",
+      "postalCode": "75001"
+    }
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("created_student_id", res.body.id);
+  }
+}

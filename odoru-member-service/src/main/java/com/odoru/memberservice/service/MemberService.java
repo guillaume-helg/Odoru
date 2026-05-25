@@ -1,5 +1,6 @@
 package com.odoru.memberservice.service;
 
+import java.util.List;
 import com.odoru.memberservice.dto.MemberCreateRequest;
 import com.odoru.memberservice.dto.MemberUpdateRequest;
 import com.odoru.memberservice.dto.RegistrationStatusDto;
@@ -8,7 +9,6 @@ import com.odoru.memberservice.exception.MemberNotFoundException;
 import com.odoru.memberservice.model.Member;
 import com.odoru.memberservice.model.MemberRole;
 import com.odoru.memberservice.repository.MemberRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -99,12 +99,18 @@ public class MemberService {
       member.setFeePaid(dto.getFeePaid());
     }
     if (dto.getMedicalCertificateProvided() != null) {
-      member.setMedicalCertificateProvided(
-          dto.getMedicalCertificateProvided());
+      member.setMedicalCertificateProvided(dto.getMedicalCertificateProvided());
     }
     if (dto.getRegistrationValidated() != null) {
       member.setRegistrationValidated(dto.getRegistrationValidated());
     }
+    return memberRepository.save(member);
+  }
+
+  public Member updateMemberRole(final String id,
+      final MemberRole role) {
+    Member member = getMemberById(id);
+    member.setRole(role);
     return memberRepository.save(member);
   }
 }

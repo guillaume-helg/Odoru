@@ -1,0 +1,9 @@
+{
+  "name": "Odoru Rhythmic Dance Club API",
+  "version": "1",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

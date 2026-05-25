@@ -1,0 +1,35 @@
+meta {
+  name: Schedule Competition
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{gateway_url}}/api/competitions
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{teacher_token}}
+}
+
+body:json {
+  {
+    "title": "Spring Rhythmic Dance Cup",
+    "targetLevel": 3,
+    "dateTime": "2026-06-15T10:00:00",
+    "location": "Main Arena",
+    "teacherId": "{{created_teacher_id}}"
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("created_competition_id", res.body.id);
+  }
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Get Course Summary Stats
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{gateway_url}}/api/stats/courses/summary
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{president_token}}
+}

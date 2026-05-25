@@ -1,0 +1,15 @@
+meta {
+  name: Get Competition Level Summary
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{gateway_url}}/api/stats/competitions/summary?level=3
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{president_token}}
+}

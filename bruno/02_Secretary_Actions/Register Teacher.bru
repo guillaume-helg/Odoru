@@ -1,0 +1,32 @@
+meta {
+  name: Register Teacher
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{gateway_url}}/api/members/signup
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "danceteacher",
+    "email": "teacher@odoru.com",
+    "firstName": "Jane",
+    "lastName": "Instructor",
+    "expertiseLevel": 4,
+    "address": {
+      "street": "456 Ballet Boulevard",
+      "city": "Paris",
+      "postalCode": "75002"
+    }
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("created_teacher_id", res.body.id);
+  }
+}
