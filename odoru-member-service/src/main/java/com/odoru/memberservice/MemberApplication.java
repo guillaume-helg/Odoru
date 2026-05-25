@@ -19,11 +19,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MemberApplication {
 
   /**
+   * Private constructor to prevent instantiation of utility class.
+   */
+  private MemberApplication() {
+    throw new UnsupportedOperationException(
+        "Utility class cannot be instantiated");
+  }
+
+  /**
    * Main entry point running the Spring Application context.
    *
    * @param args the command-line arguments
    */
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
     SpringApplication.run(MemberApplication.class, args);
   }
 }

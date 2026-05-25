@@ -1,20 +1,25 @@
 package com.odoru.memberservice.service;
 
-import java.util.List;
 import com.odoru.memberservice.dto.RegistrationStatusDto;
 import com.odoru.memberservice.model.Member;
 import com.odoru.memberservice.model.MemberRole;
 import com.odoru.memberservice.repository.MemberRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
- * Service class handling business logic for member registration, updates, and validations.
+ * Service class handling business logic for member registration, updates,
+ * and validations.
  */
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
+  /** Maximum expertise level constant. */
+  private static final int MAX_EXPERTISE_LEVEL = 5;
+
+  /** Member repository dependency. */
   private final MemberRepository memberRepository;
 
   /**
@@ -27,15 +32,17 @@ public class MemberService {
   }
 
   /**
-   * Finds a member by their ID. Throws an exception if the member does not exist.
+   * Finds a member by their ID. Throws an exception if the member does
+   * not exist.
    *
    * @param id the unique identifier of the member
    * @return the member entity
    * @throws RuntimeException if the member is not found
    */
-  public Member getMemberById(String id) {
+  public Member getMemberById(final String id) {
     return memberRepository.findById(id)
-        .orElseThrow(() -> new RuntimeException("Member not found with id : " + id));
+        .orElseThrow(() -> new RuntimeException(
+            "Member not found with id : " + id));
   }
 
   /**
@@ -45,11 +52,12 @@ public class MemberService {
    * @return the saved member entity
    * @throws RuntimeException if the email or username is already in use
    */
-  public Member registerMember(Member member) {
+  public Member registerMember(final Member member) {
     if (memberRepository.findByEmail(member.getEmail()).isPresent()) {
       throw new RuntimeException("Email already in use");
     }
-    if (memberRepository.findByUsername(member.getUsername()).isPresent()) {
+    if (memberRepository.findByUsername(member.getUsername())
+        .isPresent()) {
       throw new RuntimeException("Username already in use");
     }
     if (member.getRole() == null) {
@@ -65,7 +73,8 @@ public class MemberService {
    * @param memberDetails the new profile details
    * @return the updated and saved member entity
    */
-  public Member updateMember(String id, Member memberDetails) {
+  public Member updateMember(final String id,
+      final Member memberDetails) {
     Member member = getMemberById(id);
     member.setFirstName(memberDetails.getFirstName());
     member.setLastName(memberDetails.getLastName());
@@ -81,9 +90,11 @@ public class MemberService {
    * @return the updated and saved member entity
    * @throws IllegalArgumentException if the level is out of the 1-5 range
    */
-  public Member updateExpertiseLevel(String id, int newLevel) {
-    if (newLevel < 1 || newLevel > 5) {
-      throw new IllegalArgumentException("Expertise level between 1 and 5");
+  public Member updateExpertiseLevel(final String id,
+      final int newLevel) {
+    if (newLevel < 1 || newLevel > MAX_EXPERTISE_LEVEL) {
+      throw new IllegalArgumentException(
+          "Expertise level between 1 and 5");
     }
     Member member = getMemberById(id);
     member.setExpertiseLevel(newLevel);
@@ -95,27 +106,31 @@ public class MemberService {
    *
    * @param id the unique identifier of the member to delete
    */
-  public void deleteMember(String id) {
+  public void deleteMember(final String id) {
     memberRepository.deleteById(id);
   }
 
   /**
-   * Updates specific registration validation flags (fee payment, certificate, validation status).
+   * Updates specific registration validation flags (fee payment,
+   * certificate, validation status).
    *
    * @param id the unique identifier of the member
    * @param dto the status fields to update
    * @return the updated and saved member entity
    */
-  public Member updateRegistrationStatus(String id, RegistrationStatusDto dto) {
+  public Member updateRegistrationStatus(final String id,
+      final RegistrationStatusDto dto) {
     Member member = getMemberById(id);
     if (dto.getFeePaid() != null) {
       member.setFeePaid(dto.getFeePaid());
     }
     if (dto.getMedicalCertificateProvided() != null) {
-      member.setMedicalCertificateProvided(dto.getMedicalCertificateProvided());
+      member.setMedicalCertificateProvided(
+          dto.getMedicalCertificateProvided());
     }
     if (dto.getRegistrationValidated() != null) {
-      member.setRegistrationValidated(dto.getRegistrationValidated());
+      member.setRegistrationValidated(
+          dto.getRegistrationValidated());
     }
     return memberRepository.save(member);
   }
