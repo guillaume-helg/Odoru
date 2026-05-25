@@ -17,9 +17,15 @@ import lombok.Setter;
 @Builder
 public class Address {
 
+  /**
+   * The city where the member resides.
+   */
   @NotBlank(message = "City is required")
   private String city;
 
+  /**
+   * The country where the member resides.
+   */
   @NotBlank(message = "Country is required")
   private String country;
 }
