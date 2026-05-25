@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Data Transfer Object for partial updates of a member's registration status.
+ * Data Transfer Object for partial updates of a member's
+ * registration status.
  */
 @Getter
 @Setter
@@ -18,21 +19,21 @@ import lombok.Setter;
 @Schema(description = "DTO for updating a member's registration status")
 public class RegistrationStatusDto {
 
-  /**
-   * Indicates whether the membership fee has been paid.
-   */
-  @Schema(description = "Membership fee paid status", example = "true")
+  /** Indicates whether the membership fee has been paid. */
+  @Schema(
+      description = "Indicates whether the membership fee has been paid",
+      example = "true"
+  )
   private Boolean feePaid;
 
-  /**
-   * Indicates whether the medical certificate has been provided.
-   */
+  /** Indicates whether the medical certificate has been provided. */
   @Schema(description = "Medical cert provided status", example = "true")
   private Boolean medicalCertificateProvided;
 
-  /**
-   * Indicates whether the registration has been validated by the secretary.
-   */
-  @Schema(description = "Registration validation status", example = "true")
+  /** Indicates whether the registration has been validated. */
+  @Schema(
+      description = "Indicates whether the registration has been validated",
+      example = "true"
+  )
   private Boolean registrationValidated;
 }

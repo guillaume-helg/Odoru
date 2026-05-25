@@ -16,15 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         description = "Member Management API"
     )
 )
-public final class MemberApplication {
-
-  /**
-   * Private constructor to prevent instantiation of utility class.
-   */
-  private MemberApplication() {
-    throw new UnsupportedOperationException(
-        "Utility class cannot be instantiated");
-  }
+public class MemberApplication {
 
   /**
    * Main entry point running the Spring Application context.
