@@ -15,15 +15,24 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Schema(description = "Data Transfer Object for updating a member's registration status")
+@Schema(description = "DTO for updating a member's registration status")
 public class RegistrationStatusDto {
 
-  @Schema(description = "Indicates whether the membership fee has been paid", example = "true")
+  /**
+   * Indicates whether the membership fee has been paid.
+   */
+  @Schema(description = "Membership fee paid status", example = "true")
   private Boolean feePaid;
 
-  @Schema(description = "Indicates whether the medical certificate has been provided", example = "true")
+  /**
+   * Indicates whether the medical certificate has been provided.
+   */
+  @Schema(description = "Medical cert provided status", example = "true")
   private Boolean medicalCertificateProvided;
 
-  @Schema(description = "Indicates whether the registration has been validated by the secretary", example = "true")
+  /**
+   * Indicates whether the registration has been validated by the secretary.
+   */
+  @Schema(description = "Registration validation status", example = "true")
   private Boolean registrationValidated;
 }
