@@ -17,5 +17,63 @@ services:
     depends_on:
       - mongodb
 
+  lesson-service:
+    build:
+      context: ./odoru-lesson-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/odoru_lesson_db
+      - MEMBER_SERVICE_HOST=member-service
+    depends_on:
+      - mongodb
+      - member-service
+
+  competition-service:
+    build:
+      context: ./odoru-competition-service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/odoru_competition_db
+      - MEMBER_SERVICE_HOST=member-service
+    depends_on:
+      - mongodb
+      - member-service
+
+  badge-service:
+    build:
+      context: ./odoru-badge-service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      - MONGODB_HOST=mongodb
+      - MEMBER_SERVICE_HOST=member-service
+      - LESSON_SERVICE_HOST=lesson-service
+    depends_on:
+      - mongodb
+      - member-service
+      - lesson-service
+
+  stats-service:
+    build:
+      context: ./odoru-stats-service
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    environment:
+      - MEMBER_SERVICE_HOST=member-service
+      - LESSON_SERVICE_HOST=lesson-service
+      - COMPETITION_SERVICE_HOST=competition-service
+      - BADGE_SERVICE_HOST=badge-service
+    depends_on:
+      - member-service
+      - lesson-service
+      - competition-service
+      - badge-service
+
 volumes:
   mongo-data:
