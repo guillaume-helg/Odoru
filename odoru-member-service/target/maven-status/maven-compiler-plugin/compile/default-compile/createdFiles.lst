@@ -1,0 +1,10 @@
+com\odoru\memberservice\controller\MemberController.class
+com\odoru\memberservice\repository\MemberRepository.class
+com\odoru\memberservice\MemberApplication.class
+com\odoru\memberservice\service\MemberService.class
+com\odoru\memberservice\model\Member.class
+com\odoru\memberservice\model\MemberRole.class
+com\odoru\memberservice\model\Address.class
+com\odoru\memberservice\model\Address$AddressBuilder.class
+com\odoru\memberservice\exception\GlobalExceptionHandler.class
+com\odoru\memberservice\model\Member$MemberBuilder.class
