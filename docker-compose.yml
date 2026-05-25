@@ -17,5 +17,19 @@ services:
     depends_on:
       - mongodb
 
+  lesson-service:
+    build:
+      context: ./odoru-lesson-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/odoru_lesson_db
+      - MEMBER_SERVICE_HOST=member-service
+    depends_on:
+      - mongodb
+      - member-service
+
 volumes:
   mongo-data:
+

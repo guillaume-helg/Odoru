@@ -153,4 +153,35 @@ public final class MemberController {
     memberService.deleteMember(id);
     return ResponseEntity.noContent().build();
   }
+
+  /**
+   * Enables updating a member's role (e.g., designating them as a teacher).
+   *
+   * @param id the unique identifier of the member
+   * @param role the new role to assign
+   * @return the updated member profile
+   */
+  @PatchMapping("/{id}/role")
+  @Operation(
+      summary = "Update member role",
+      description = "Enables updating a member's role (e.g., designating "
+          + "them as a teacher). Restricted to Secretary."
+  )
+  @ApiResponses({
+      @ApiResponse(responseCode = "200",
+          description = "Member role successfully updated"),
+      @ApiResponse(responseCode = "400",
+          description = "Invalid role value"),
+      @ApiResponse(responseCode = "404",
+          description = "Member not found with the specified ID")
+  })
+  public ResponseEntity<Member> updateRole(
+      @Parameter(description = "The unique identifier of the member",
+          required = true)
+      @PathVariable final String id,
+      @Parameter(description = "The new role to assign", required = true)
+      @RequestParam final MemberRole role) {
+    return ResponseEntity.ok(memberService.updateMemberRole(id, role));
+  }
 }
+
