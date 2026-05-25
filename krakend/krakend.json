@@ -1,0 +1,338 @@
+{
+  "version": 3,
+  "port": 8080,
+  "timeout": "3s",
+  "cache_ttl": "0s",
+  "endpoints": [
+    {
+      "endpoint": "/api/members",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/members",
+          "host": ["http://member-service:8080"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/members",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/api/members",
+          "host": ["http://member-service:8080"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/members/signup",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/api/members/signup",
+          "host": ["http://member-service:8080"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/members/{id}",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/members/{id}",
+          "host": ["http://member-service:8080"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/members/{id}",
+      "method": "PUT",
+      "backend": [
+        {
+          "url_pattern": "/api/members/{id}",
+          "host": ["http://member-service:8080"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/members/{id}",
+      "method": "DELETE",
+      "backend": [
+        {
+          "url_pattern": "/api/members/{id}",
+          "host": ["http://member-service:8080"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/members/{id}/expertise",
+      "method": "PATCH",
+      "backend": [
+        {
+          "url_pattern": "/api/members/{id}/expertise",
+          "host": ["http://member-service:8080"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/members/{id}/registration-status",
+      "method": "PATCH",
+      "backend": [
+        {
+          "url_pattern": "/api/members/{id}/registration-status",
+          "host": ["http://member-service:8080"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/members/{id}/role",
+      "method": "PATCH",
+      "backend": [
+        {
+          "url_pattern": "/api/members/{id}/role",
+          "host": ["http://member-service:8080"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/lessons",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/lessons",
+          "host": ["http://lesson-service:8081"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/lessons",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/api/lessons",
+          "host": ["http://lesson-service:8081"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/lessons/{id}",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/lessons/{id}",
+          "host": ["http://lesson-service:8081"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/lessons/teacher/{teacherId}",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/lessons/teacher/{teacherId}",
+          "host": ["http://lesson-service:8081"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/lessons/student/{studentId}",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/lessons/student/{studentId}",
+          "host": ["http://lesson-service:8081"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/competitions",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/competitions",
+          "host": ["http://competition-service:8082"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/competitions",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/api/competitions",
+          "host": ["http://competition-service:8082"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/competitions/{id}",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/competitions/{id}",
+          "host": ["http://competition-service:8082"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/competitions/student/{studentId}",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/competitions/student/{studentId}",
+          "host": ["http://competition-service:8082"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/competitions/{competitionId}/results/{studentId}",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/api/competitions/{competitionId}/results/{studentId}",
+          "host": ["http://competition-service:8082"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/competitions/results/student/{studentId}",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/competitions/results/student/{studentId}",
+          "host": ["http://competition-service:8082"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/badges/associate",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/api/badges/associate",
+          "host": ["http://badge-service:8083"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/badges/dissociate/{memberId}",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/api/badges/dissociate/{memberId}",
+          "host": ["http://badge-service:8083"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/badges/scan",
+      "method": "POST",
+      "backend": [
+        {
+          "url_pattern": "/api/badges/scan",
+          "host": ["http://badge-service:8083"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/badges/attendance/student/{studentId}",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/badges/attendance/student/{studentId}",
+          "host": ["http://badge-service:8083"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/badges/attendance/lesson/{lessonId}",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/badges/attendance/lesson/{lessonId}",
+          "host": ["http://badge-service:8083"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/stats/courses/summary",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/stats/courses/summary",
+          "host": ["http://stats-service:8084"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/stats/courses/{lessonId}/attendance",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/stats/courses/{lessonId}/attendance",
+          "host": ["http://stats-service:8084"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/stats/students/{studentId}/attendance",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/stats/students/{studentId}/attendance",
+          "host": ["http://stats-service:8084"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/stats/competitions/summary",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/stats/competitions/summary",
+          "host": ["http://stats-service:8084"]
+        }
+      ],
+      "input_headers": ["*"]
+    },
+    {
+      "endpoint": "/api/stats/students/{studentId}/competitions",
+      "method": "GET",
+      "backend": [
+        {
+          "url_pattern": "/api/stats/students/{studentId}/competitions",
+          "host": ["http://stats-service:8084"]
+        }
+      ],
+      "input_headers": ["*"]
+    }
+  ]
+}

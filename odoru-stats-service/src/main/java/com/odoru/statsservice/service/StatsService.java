@@ -1,0 +1,218 @@
+package com.odoru.statsservice.service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import com.odoru.statsservice.client.BadgeClient;
+import com.odoru.statsservice.client.CompetitionClient;
+import com.odoru.statsservice.client.LessonClient;
+import com.odoru.statsservice.client.MemberClient;
+import com.odoru.statsservice.dto.CompetitionDto;
+import com.odoru.statsservice.dto.CompetitionResultDto;
+import com.odoru.statsservice.dto.CourseSummaryDto;
+import com.odoru.statsservice.dto.LessonAttendanceDto;
+import com.odoru.statsservice.dto.LessonDto;
+import com.odoru.statsservice.dto.MemberDto;
+import com.odoru.statsservice.dto.StudentCompetitionResultDto;
+import com.odoru.statsservice.dto.StudentCoursePresenceDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+/**
+ * Service class aggregating statistics from multiple microservices.
+ */
+@Service
+@RequiredArgsConstructor
+public class StatsService {
+
+  /** Member service client. */
+  private final MemberClient memberClient;
+
+  /** Lesson service client. */
+  private final LessonClient lessonClient;
+
+  /** Competition service client. */
+  private final CompetitionClient competitionClient;
+
+  /** Badge service client. */
+  private final BadgeClient badgeClient;
+
+  /**
+   * Summarizes the total number of courses and calculates the average student attendance.
+   *
+   * @return the course statistics summary
+   */
+  public CourseSummaryDto getCourseSummary() {
+    final List<LessonDto> lessons = lessonClient.getAllLessons();
+    if (lessons.isEmpty()) {
+      return CourseSummaryDto.builder()
+          .totalCourses(0)
+          .averageAttendance(0.0)
+          .build();
+    }
+
+    int totalAttendance = 0;
+    for (final LessonDto lesson : lessons) {
+      totalAttendance += badgeClient.getLessonAttendees(lesson.getId()).size();
+    }
+
+    final double average = (double) totalAttendance / lessons.size();
+
+    return CourseSummaryDto.builder()
+        .totalCourses(lessons.size())
+        .averageAttendance(average)
+        .build();
+  }
+
+  /**
+   * Retrieves the detailed attendee list and presence count for a specific lesson.
+   *
+   * @param lessonId the unique identifier of the lesson
+   * @return the attendance details
+   */
+  public LessonAttendanceDto getLessonAttendance(final String lessonId) {
+    // 1. Fetch lesson to verify it exists
+    lessonClient.getLessonById(lessonId);
+
+    // 2. Fetch attendee student IDs
+    final List<String> studentIds = badgeClient.getLessonAttendees(lessonId);
+
+    // 3. Resolve student profiles
+    final List<MemberDto> students = new ArrayList<>();
+    for (final String id : studentIds) {
+      try {
+        students.add(memberClient.getMemberById(id));
+      } catch (Exception ex) {
+        // Skip unresolved profiles
+      }
+    }
+
+    return LessonAttendanceDto.builder()
+        .presentCount(students.size())
+        .presentStudents(students)
+        .build();
+  }
+
+  /**
+   * Compiles the list of courses for a student with present/absent status.
+   * Enrolls student de facto in all lessons matching their target level.
+   *
+   * @param studentId the student identifier
+   * @param start optional start date/time filter
+   * @param end optional end date/time filter
+   * @return the list of course presences
+   */
+  public List<StudentCoursePresenceDto> getStudentCoursePresence(
+      final String studentId,
+      final LocalDateTime start,
+      final LocalDateTime end) {
+
+    // 1. Fetch student to retrieve their target expertise level
+    final MemberDto student = memberClient.getMemberById(studentId);
+    final int targetLevel = student.getExpertiseLevel();
+
+    // 2. Fetch all lessons and filter by student level & date range
+    List<LessonDto> lessons = lessonClient.getAllLessons().stream()
+        .filter(lesson -> lesson.getTargetLevel() == targetLevel)
+        .collect(Collectors.toList());
+
+    if (start != null) {
+      lessons = lessons.stream()
+          .filter(l -> !l.getDateTime().isBefore(start))
+          .collect(Collectors.toList());
+    }
+    if (end != null) {
+      lessons = lessons.stream()
+          .filter(l -> !l.getDateTime().isAfter(end))
+          .collect(Collectors.toList());
+    }
+
+    // 3. Fetch lessons attended by the student
+    final List<LessonDto> attended = badgeClient.getStudentAttendedLessons(
+        studentId);
+    final Set<String> attendedIds = attended.stream()
+        .map(LessonDto::getId)
+        .collect(Collectors.toSet());
+
+    // 4. Map each course to presence status
+    final List<StudentCoursePresenceDto> result = new ArrayList<>();
+    for (final LessonDto lesson : lessons) {
+      result.add(StudentCoursePresenceDto.builder()
+          .lesson(lesson)
+          .present(attendedIds.contains(lesson.getId()))
+          .build());
+    }
+
+    return result;
+  }
+
+  /**
+   * Counts the number of scheduled competitions for a given target level.
+   *
+   * @param level the target level
+   * @return the competition count
+   */
+  public long getCompetitionsCountByLevel(final int level) {
+    return competitionClient.getAllCompetitions().stream()
+        .filter(comp -> comp.getTargetLevel() == level)
+        .count();
+  }
+
+  /**
+   * Retrieves the student's de facto competitions with their results.
+   *
+   * @param studentId the student identifier
+   * @param start optional start date/time filter
+   * @param end optional end date/time filter
+   * @return the list of student competitions with scores
+   */
+  public List<StudentCompetitionResultDto> getStudentCompetitionResults(
+      final String studentId,
+      final LocalDateTime start,
+      final LocalDateTime end) {
+
+    // 1. Fetch student to get their level
+    final MemberDto student = memberClient.getMemberById(studentId);
+    final int level = student.getExpertiseLevel();
+
+    // 2. Fetch competitions and filter by level & date range
+    List<CompetitionDto> competitions = competitionClient.getAllCompetitions()
+        .stream()
+        .filter(comp -> comp.getTargetLevel() == level)
+        .collect(Collectors.toList());
+
+    if (start != null) {
+      competitions = competitions.stream()
+          .filter(c -> !c.getDateTime().isBefore(start))
+          .collect(Collectors.toList());
+    }
+    if (end != null) {
+      competitions = competitions.stream()
+          .filter(c -> !c.getDateTime().isAfter(end))
+          .collect(Collectors.toList());
+    }
+
+    // 3. Fetch student scores
+    final List<CompetitionResultDto> results = competitionClient
+        .getStudentResults(studentId);
+    final Map<String, Double> scoreMap = results.stream()
+        .collect(Collectors.toMap(
+            CompetitionResultDto::getCompetitionId,
+            CompetitionResultDto::getScore,
+            (score1, score2) -> score1));
+
+    // 4. Map competitions to results
+    final List<StudentCompetitionResultDto> list = new ArrayList<>();
+    for (final CompetitionDto comp : competitions) {
+      list.add(StudentCompetitionResultDto.builder()
+          .competition(comp)
+          .score(scoreMap.get(comp.getId()))
+          .build());
+    }
+
+    return list;
+  }
+}
