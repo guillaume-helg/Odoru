@@ -16,7 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         description = "Member Management API"
     )
 )
-public class MemberApplication {
+public final class MemberApplication {
 
   /**
    * Private constructor to prevent instantiation of utility class.
