@@ -1,16 +1,16 @@
 package com.odoru.memberservice.service;
 
+import java.util.List;
 import com.odoru.memberservice.dto.RegistrationStatusDto;
 import com.odoru.memberservice.model.Member;
 import com.odoru.memberservice.model.MemberRole;
 import com.odoru.memberservice.repository.MemberRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
- * Service class handling business logic for member registration, updates,
- * and validations.
+ * Service class handling business logic for member registration,
+ * updates, and validations.
  */
 @Service
 @RequiredArgsConstructor
@@ -32,8 +32,8 @@ public class MemberService {
   }
 
   /**
-   * Finds a member by their ID. Throws an exception if the member does
-   * not exist.
+   * Finds a member by their ID. Throws an exception if
+   * the member does not exist.
    *
    * @param id the unique identifier of the member
    * @return the member entity
@@ -125,13 +125,26 @@ public class MemberService {
       member.setFeePaid(dto.getFeePaid());
     }
     if (dto.getMedicalCertificateProvided() != null) {
-      member.setMedicalCertificateProvided(
-          dto.getMedicalCertificateProvided());
+      member.setMedicalCertificateProvided(dto.getMedicalCertificateProvided());
     }
     if (dto.getRegistrationValidated() != null) {
-      member.setRegistrationValidated(
-          dto.getRegistrationValidated());
+      member.setRegistrationValidated(dto.getRegistrationValidated());
     }
     return memberRepository.save(member);
   }
+
+  /**
+   * Updates a member's role (e.g., designating them as a teacher).
+   *
+   * @param id the unique identifier of the member
+   * @param role the new role to assign
+   * @return the updated and saved member entity
+   */
+  public Member updateMemberRole(final String id,
+      final MemberRole role) {
+    Member member = getMemberById(id);
+    member.setRole(role);
+    return memberRepository.save(member);
+  }
 }
+

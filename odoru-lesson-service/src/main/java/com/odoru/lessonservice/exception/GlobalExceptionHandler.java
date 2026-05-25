@@ -1,4 +1,4 @@
-package com.odoru.memberservice.exception;
+package com.odoru.lessonservice.exception;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +23,18 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(RuntimeException.class)
   public ResponseEntity<String> handleRuntimeException(
       final RuntimeException ex) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+  }
+
+  /**
+   * Handles IllegalArgumentException and returns a BAD_REQUEST status.
+   *
+   * @param ex the exception to handle
+   * @return a ResponseEntity containing the error message
+   */
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<String> handleIllegalArgumentException(
+      final IllegalArgumentException ex) {
     return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
   }
 

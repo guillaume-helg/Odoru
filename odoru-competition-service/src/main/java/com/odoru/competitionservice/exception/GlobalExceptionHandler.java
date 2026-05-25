@@ -1,4 +1,4 @@
-package com.odoru.memberservice.exception;
+package com.odoru.competitionservice.exception;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +27,19 @@ public class GlobalExceptionHandler {
   }
 
   /**
-   * Handles validation exceptions and returns map of field errors with
-   * BAD_REQUEST status.
+   * Handles IllegalArgumentException and returns a BAD_REQUEST status.
+   *
+   * @param ex the exception to handle
+   * @return a ResponseEntity containing the error message
+   */
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<String> handleIllegalArgumentException(
+      final IllegalArgumentException ex) {
+    return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+  }
+
+  /**
+   * Handles validation exceptions and returns map of field errors.
    *
    * @param ex the validation exception to handle
    * @return a ResponseEntity containing a map of invalid fields and

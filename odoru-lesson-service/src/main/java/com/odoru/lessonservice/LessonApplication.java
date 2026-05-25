@@ -1,4 +1,4 @@
-package com.odoru.memberservice;
+package com.odoru.lessonservice;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -6,17 +6,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Entry point for the Spring Boot Member Application service.
+ * Entry point for the Spring Boot Lesson Application service.
  */
 @SpringBootApplication
 @OpenAPIDefinition(
     info = @Info(
-        title = "Odoru Member Service API",
+        title = "Odoru Lesson Service API",
         version = "1.0",
-        description = "Member Management API"
+        description = "Lesson/Course Slots Management API"
     )
 )
-public class MemberApplication {
+@SuppressWarnings("checkstyle:HideUtilityClassConstructor")
+public class LessonApplication {
 
   /**
    * Main entry point running the Spring Application context.
@@ -24,6 +25,6 @@ public class MemberApplication {
    * @param args the command-line arguments
    */
   public static void main(final String[] args) {
-    SpringApplication.run(MemberApplication.class, args);
+    SpringApplication.run(LessonApplication.class, args);
   }
 }
