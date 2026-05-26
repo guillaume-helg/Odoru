@@ -55,7 +55,7 @@ jobs:
           path: .
 
       - name: Generate Swagger UI
-        uses: peter-evans/swagger-ui-action@v3
+        uses: Legion2/swagger-ui-action@v1
         with:
           output: public
           spec-file: openapi.json

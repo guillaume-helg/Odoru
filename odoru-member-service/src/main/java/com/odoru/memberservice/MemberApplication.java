@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         description = "Member Management API"
     )
 )
-public class MemberApplication {
+public final class MemberApplication {
 
   public static void main(final String[] args) {
     SpringApplication.run(MemberApplication.class, args);
