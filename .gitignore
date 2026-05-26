@@ -1,0 +1,8 @@
+.idea
+**/target/
+*.class
+*.jar
+*.log
+*.pdf
+.env
+.DS_Store
