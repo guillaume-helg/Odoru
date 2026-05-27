@@ -1,6 +1,5 @@
 package com.odoru.memberservice.service;
 
-import java.util.List;
 import com.odoru.memberservice.dto.MemberCreateRequest;
 import com.odoru.memberservice.dto.MemberUpdateRequest;
 import com.odoru.memberservice.dto.RegistrationStatusDto;
@@ -9,6 +8,7 @@ import com.odoru.memberservice.exception.MemberNotFoundException;
 import com.odoru.memberservice.model.Member;
 import com.odoru.memberservice.model.MemberRole;
 import com.odoru.memberservice.repository.MemberRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -18,6 +18,20 @@ async def main():
             .as_service()
         )
 
+        # Wait for MongoDB to be ready
+        print("Waiting for MongoDB service to start...")
+        await (
+            dag.container()
+            .from_("alpine:latest")
+            .with_service_binding("mongodb", mongodb)
+            .with_exec([
+                "sh", "-c",
+                "apk add --no-cache netcat-openbsd && until nc -z mongodb 27017; do sleep 0.5; done"
+            ])
+            .sync()
+        )
+        print("MongoDB service is ready!")
+
         # 3. Define base Maven containers using JDK 26
         m2_cache = dag.cache_volume("maven-m2-cache")
 
