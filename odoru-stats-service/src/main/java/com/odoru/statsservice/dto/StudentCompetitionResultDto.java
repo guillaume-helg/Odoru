@@ -16,9 +16,6 @@ import lombok.Setter;
 @Builder
 public class StudentCompetitionResultDto {
 
-  /** The competition details. */
   private CompetitionDto competition;
-
-  /** The score achieved by the student (null if not yet graded). */
   private Double score;
 }

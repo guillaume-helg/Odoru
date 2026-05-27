@@ -16,9 +16,6 @@ import lombok.Setter;
 @Builder
 public class CourseSummaryDto {
 
-  /** The total number of courses/lessons scheduled. */
   private int totalCourses;
-
-  /** The average number of students present per course. */
   private double averageAttendance;
 }

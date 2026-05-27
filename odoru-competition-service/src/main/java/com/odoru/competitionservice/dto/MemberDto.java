@@ -17,18 +17,9 @@ import lombok.Setter;
 @Builder
 public class MemberDto {
 
-  /** The unique identifier of the member. */
   private String id;
-
-  /** The first name of the member. */
   private String firstName;
-
-  /** The last name of the member. */
   private String lastName;
-
-  /** The role assigned to the member. */
   private MemberRole role;
-
-  /** The dance expertise level of the member. */
   private int expertiseLevel;
 }

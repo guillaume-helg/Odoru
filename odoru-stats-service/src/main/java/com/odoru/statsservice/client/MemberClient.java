@@ -15,14 +15,8 @@ import org.springframework.web.client.RestClientResponseException;
 @Component
 public class MemberClient {
 
-  /** RestClient instance. */
   private final RestClient restClient;
 
-  /**
-   * Constructs the MemberClient with the configured Member Service URL.
-   *
-   * @param memberServiceUrl the URL of the member service
-   */
   public MemberClient(
       @Value("${odoru.member-service.url}") final String memberServiceUrl) {
     this.restClient = RestClient.builder()
@@ -32,10 +26,6 @@ public class MemberClient {
   }
 
   /**
-   * Retrieves a member's details by their ID.
-   *
-   * @param memberId the unique identifier of the member
-   * @return the member details
    * @throws RuntimeException if the member is not found or connection fails
    */
   public MemberDto getMemberById(final String memberId) {
@@ -57,9 +47,7 @@ public class MemberClient {
   }
 
   /**
-   * Retrieves all members registered in the system.
-   *
-   * @return the list of all members
+   * @throws RuntimeException if the request fails
    */
   public List<MemberDto> getAllMembers() {
     try {

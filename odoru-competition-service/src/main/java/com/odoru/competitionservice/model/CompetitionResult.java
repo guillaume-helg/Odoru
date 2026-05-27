@@ -25,28 +25,22 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 public class CompetitionResult {
 
-  /** Maximum score allowed (out of 10). */
-  private static final double MAX_SCORE = 10.0;
+  private static final long MAX_SCORE_LIMIT = 10L;
 
-  /** The unique identifier of the result entry. */
   @Id
   private String id;
 
-  /** The unique identifier of the competition. */
   @NotBlank(message = "Competition ID is required")
   private String competitionId;
 
-  /** The unique identifier of the student. */
   @NotBlank(message = "Student ID is required")
   private String studentId;
 
-  /** The score achieved by the student (0.0 - 10.0). */
   @NotNull(message = "Score is required")
   @Min(value = 0, message = "Score must be at least 0.0")
-  @Max(value = 10, message = "Score must be at most 10.0")
+  @Max(value = MAX_SCORE_LIMIT, message = "Score must be at most 10.0")
   private Double score;
 
-  /** The unique identifier of the teacher who entered this result. */
   @NotBlank(message = "Teacher ID is required")
   private String teacherId;
 }

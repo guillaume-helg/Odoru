@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Controller class managing REST API endpoints for competition planning.
+ * REST API endpoints for competition planning.
  */
 @RestController
 @RequestMapping("/api/competitions")
@@ -32,17 +32,10 @@ import org.springframework.web.bind.annotation.RestController;
     name = "Competitions",
     description = "APIs for competition planning and result recording."
 )
-public class CompetitionController {
+public final class CompetitionController {
 
-  /** Competition service dependency. */
   private final CompetitionService competitionService;
 
-  /**
-   * Schedules a new competition in the system.
-   *
-   * @param competition the competition details
-   * @return the created competition entity
-   */
   @PostMapping
   @PreAuthorize("hasRole('TEACHER')")
   @Operation(
@@ -63,13 +56,6 @@ public class CompetitionController {
         HttpStatus.CREATED);
   }
 
-  /**
-   * Retrieves registered competitions, optionally filtered by level or teacher ID.
-   *
-   * @param level optional target level filter
-   * @param teacherId optional teacher filter
-   * @return the list of competitions
-   */
   @GetMapping
   @Operation(
       summary = "Get competitions",
@@ -94,12 +80,6 @@ public class CompetitionController {
     return ResponseEntity.ok(competitionService.getAllCompetitions());
   }
 
-  /**
-   * Retrieves a specific competition by its ID.
-   *
-   * @param id the unique identifier of the competition
-   * @return the competition entity
-   */
   @GetMapping("/{id}")
   @Operation(
       summary = "Get competition by ID",
@@ -119,12 +99,6 @@ public class CompetitionController {
     return ResponseEntity.ok(competitionService.getCompetitionById(id));
   }
 
-  /**
-   * Retrieves competitions registered to a student (by matching target level).
-   *
-   * @param studentId the student identifier
-   * @return the list of competitions for this student
-   */
   @GetMapping("/student/{studentId}")
   @Operation(
       summary = "Get student competitions",
@@ -145,15 +119,6 @@ public class CompetitionController {
         competitionService.getCompetitionsForStudent(studentId));
   }
 
-  /**
-   * Records or updates a student's score for a competition.
-   *
-   * @param competitionId the competition identifier
-   * @param studentId the student identifier
-   * @param score the score out of 10
-   * @param teacherId the ID of the teacher entering the score
-   * @return the saved result
-   */
   @PostMapping("/{competitionId}/results/{studentId}")
   @PreAuthorize("hasRole('TEACHER')")
   @Operation(
@@ -184,12 +149,6 @@ public class CompetitionController {
             competitionId, studentId, score, teacherId));
   }
 
-  /**
-   * Retrieves all results/scores achieved by a student.
-   *
-   * @param studentId the student identifier
-   * @return the list of results
-   */
   @GetMapping("/results/student/{studentId}")
   @Operation(
       summary = "Get student results",

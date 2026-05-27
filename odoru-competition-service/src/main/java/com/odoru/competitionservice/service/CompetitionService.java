@@ -2,7 +2,6 @@ package com.odoru.competitionservice.service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import com.odoru.competitionservice.client.MemberClient;
 import com.odoru.competitionservice.dto.MemberDto;
 import com.odoru.competitionservice.model.Competition;
@@ -13,36 +12,21 @@ import com.odoru.competitionservice.repository.CompetitionResultRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-/**
- * Service class handling business logic for competition planning.
- */
+/** Business logic for competition planning. */
 @Service
 @RequiredArgsConstructor
 public class CompetitionService {
 
-  /** Minimum days in advance to schedule a competition. */
   private static final int MIN_DAYS_IN_ADVANCE = 7;
-
-  /** Maximum allowed score. */
   private static final double MAX_SCORE = 10.0;
-
-  /** Precision tolerance for score matching 1/10th decimal. */
   private static final double SCORE_PRECISION_TOLERANCE = 1e-9;
 
-  /** Competition repository. */
   private final CompetitionRepository competitionRepository;
-
-  /** Competition result repository. */
   private final CompetitionResultRepository competitionResultRepository;
-
-  /** Member service client. */
   private final MemberClient memberClient;
 
   /**
-   * Creates a new competition after validating all business rules.
-   *
-   * @param competition the competition details
-   * @return the saved competition
+   * @throws IllegalArgumentException if date or organizer is invalid
    */
   public Competition createCompetition(final Competition competition) {
     // 1. Date check: must be >= 7 days in advance
@@ -72,10 +56,7 @@ public class CompetitionService {
   }
 
   /**
-   * Retrieves a specific competition by its ID.
-   *
-   * @param id the unique identifier of the competition
-   * @return the competition details
+   * @throws RuntimeException if competition not found
    */
   public Competition getCompetitionById(final String id) {
     return competitionRepository.findById(id)
@@ -83,54 +64,25 @@ public class CompetitionService {
             "Competition not found with id: " + id));
   }
 
-  /**
-   * Retrieves all competitions.
-   *
-   * @return the list of all competitions
-   */
   public List<Competition> getAllCompetitions() {
     return competitionRepository.findAll();
   }
 
-  /**
-   * Retrieves competitions by target level.
-   *
-   * @param level the target level
-   * @return the list of competitions matching the target level
-   */
   public List<Competition> getCompetitionsByLevel(final int level) {
     return competitionRepository.findByTargetLevel(level);
   }
 
-  /**
-   * Retrieves competitions organized by a specific teacher.
-   *
-   * @param teacherId the unique identifier of the teacher
-   * @return the list of competitions organized by the teacher
-   */
   public List<Competition> getCompetitionsByTeacher(final String teacherId) {
     return competitionRepository.findByTeacherId(teacherId);
   }
 
-  /**
-   * Retrieves competitions for a student based on their expertise level.
-   *
-   * @param studentId the unique identifier of the student
-   * @return the list of competitions matching the student's level
-   */
   public List<Competition> getCompetitionsForStudent(final String studentId) {
     final MemberDto student = memberClient.getMemberById(studentId);
     return getCompetitionsByLevel(student.getExpertiseLevel());
   }
 
   /**
-   * Registers or updates a student result for a competition.
-   *
-   * @param competitionId the unique identifier of the competition
-   * @param studentId the unique identifier of the student
-   * @param score the score obtained (0.0 to 10.0, 1/10th precision)
-   * @param teacherId the unique identifier of the inputting teacher
-   * @return the saved competition result
+   * @throws IllegalArgumentException if score, teacher, or student eligibility is invalid
    */
   public CompetitionResult addOrUpdateResult(
       final String competitionId,
@@ -179,12 +131,6 @@ public class CompetitionService {
     return competitionResultRepository.save(result);
   }
 
-  /**
-   * Retrieves all results achieved by a student.
-   *
-   * @param studentId the unique identifier of the student
-   * @return the list of results
-   */
   public List<CompetitionResult> getStudentResults(final String studentId) {
     memberClient.getMemberById(studentId); // Verify student exists
     return competitionResultRepository.findByStudentId(studentId);

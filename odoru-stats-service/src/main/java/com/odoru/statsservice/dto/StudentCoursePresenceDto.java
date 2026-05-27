@@ -16,9 +16,6 @@ import lombok.Setter;
 @Builder
 public class StudentCoursePresenceDto {
 
-  /** The course/lesson details. */
   private LessonDto lesson;
-
-  /** Whether the student was present (attended/swiped) at this lesson. */
   private boolean present;
 }

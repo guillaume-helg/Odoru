@@ -15,14 +15,8 @@ import org.springframework.web.client.RestClientResponseException;
 @Component
 public class LessonClient {
 
-  /** RestClient instance. */
   private final RestClient restClient;
 
-  /**
-   * Constructs the LessonClient with the configured Lesson Service URL.
-   *
-   * @param lessonServiceUrl the URL of the lesson service
-   */
   public LessonClient(
       @Value("${odoru.lesson-service.url}") final String lessonServiceUrl) {
     this.restClient = RestClient.builder()
@@ -32,9 +26,7 @@ public class LessonClient {
   }
 
   /**
-   * Retrieves all scheduled lessons.
-   *
-   * @return the list of all lessons
+   * @throws RuntimeException if the request fails
    */
   public List<LessonDto> getAllLessons() {
     try {
@@ -49,10 +41,6 @@ public class LessonClient {
   }
 
   /**
-   * Retrieves a specific lesson's details by its ID.
-   *
-   * @param id the unique identifier of the lesson
-   * @return the lesson details
    * @throws RuntimeException if the lesson is not found or connection fails
    */
   public LessonDto getLessonById(final String id) {

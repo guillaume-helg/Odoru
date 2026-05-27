@@ -21,30 +21,16 @@ import com.odoru.statsservice.dto.StudentCoursePresenceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-/**
- * Service class aggregating statistics from multiple microservices.
- */
+/** Business logic aggregating statistics from multiple microservices. */
 @Service
 @RequiredArgsConstructor
 public class StatsService {
 
-  /** Member service client. */
   private final MemberClient memberClient;
-
-  /** Lesson service client. */
   private final LessonClient lessonClient;
-
-  /** Competition service client. */
   private final CompetitionClient competitionClient;
-
-  /** Badge service client. */
   private final BadgeClient badgeClient;
 
-  /**
-   * Summarizes the total number of courses and calculates the average student attendance.
-   *
-   * @return the course statistics summary
-   */
   public CourseSummaryDto getCourseSummary() {
     final List<LessonDto> lessons = lessonClient.getAllLessons();
     if (lessons.isEmpty()) {
@@ -67,12 +53,6 @@ public class StatsService {
         .build();
   }
 
-  /**
-   * Retrieves the detailed attendee list and presence count for a specific lesson.
-   *
-   * @param lessonId the unique identifier of the lesson
-   * @return the attendance details
-   */
   public LessonAttendanceDto getLessonAttendance(final String lessonId) {
     // 1. Fetch lesson to verify it exists
     lessonClient.getLessonById(lessonId);
@@ -96,15 +76,6 @@ public class StatsService {
         .build();
   }
 
-  /**
-   * Compiles the list of courses for a student with present/absent status.
-   * Enrolls student de facto in all lessons matching their target level.
-   *
-   * @param studentId the student identifier
-   * @param start optional start date/time filter
-   * @param end optional end date/time filter
-   * @return the list of course presences
-   */
   public List<StudentCoursePresenceDto> getStudentCoursePresence(
       final String studentId,
       final LocalDateTime start,
@@ -149,26 +120,12 @@ public class StatsService {
     return result;
   }
 
-  /**
-   * Counts the number of scheduled competitions for a given target level.
-   *
-   * @param level the target level
-   * @return the competition count
-   */
   public long getCompetitionsCountByLevel(final int level) {
     return competitionClient.getAllCompetitions().stream()
         .filter(comp -> comp.getTargetLevel() == level)
         .count();
   }
 
-  /**
-   * Retrieves the student's de facto competitions with their results.
-   *
-   * @param studentId the student identifier
-   * @param start optional start date/time filter
-   * @param end optional end date/time filter
-   * @return the list of student competitions with scores
-   */
   public List<StudentCompetitionResultDto> getStudentCompetitionResults(
       final String studentId,
       final LocalDateTime start,

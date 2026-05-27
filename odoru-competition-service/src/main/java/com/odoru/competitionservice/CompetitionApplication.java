@@ -5,9 +5,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * Entry point for the Spring Boot Competition Application service.
- */
+/** Entry point for the Spring Boot Competition Application service. */
 @SpringBootApplication
 @OpenAPIDefinition(
     info = @Info(
@@ -16,14 +14,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         description = "Competition Management & Score Processing API"
     )
 )
-@SuppressWarnings("checkstyle:HideUtilityClassConstructor")
 public class CompetitionApplication {
 
-  /**
-   * Main entry point running the Spring Application context.
-   *
-   * @param args the command-line arguments
-   */
   public static void main(final String[] args) {
     SpringApplication.run(CompetitionApplication.class, args);
   }

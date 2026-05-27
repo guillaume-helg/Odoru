@@ -14,14 +14,8 @@ import org.springframework.web.client.RestClient;
 @Component
 public class CompetitionClient {
 
-  /** RestClient instance. */
   private final RestClient restClient;
 
-  /**
-   * Constructs the CompetitionClient with the configured Competition Service URL.
-   *
-   * @param competitionServiceUrl the URL of the competition service
-   */
   public CompetitionClient(
       @Value("${odoru.competition-service.url}")
       final String competitionServiceUrl) {
@@ -32,9 +26,7 @@ public class CompetitionClient {
   }
 
   /**
-   * Retrieves all scheduled competitions.
-   *
-   * @return the list of all competitions
+   * @throws RuntimeException if the request fails
    */
   public List<CompetitionDto> getAllCompetitions() {
     try {
@@ -49,10 +41,7 @@ public class CompetitionClient {
   }
 
   /**
-   * Retrieves all scores achieved by a student.
-   *
-   * @param studentId the unique identifier of the student
-   * @return the list of competition results
+   * @throws RuntimeException if the request fails
    */
   public List<CompetitionResultDto> getStudentResults(final String studentId) {
     try {

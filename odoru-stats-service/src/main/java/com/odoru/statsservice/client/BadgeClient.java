@@ -13,14 +13,8 @@ import org.springframework.web.client.RestClient;
 @Component
 public class BadgeClient {
 
-  /** RestClient instance. */
   private final RestClient restClient;
 
-  /**
-   * Constructs the BadgeClient with the configured Badge Service URL.
-   *
-   * @param badgeServiceUrl the URL of the badge service
-   */
   public BadgeClient(
       @Value("${odoru.badge-service.url}") final String badgeServiceUrl) {
     this.restClient = RestClient.builder()
@@ -30,10 +24,7 @@ public class BadgeClient {
   }
 
   /**
-   * Retrieves the list of student IDs present at a specific lesson.
-   *
-   * @param lessonId the unique identifier of the lesson
-   * @return the list of student IDs present
+   * @throws RuntimeException if the request fails
    */
   public List<String> getLessonAttendees(final String lessonId) {
     try {
@@ -48,10 +39,7 @@ public class BadgeClient {
   }
 
   /**
-   * Retrieves all lessons successfully attended by a student.
-   *
-   * @param studentId the unique identifier of the student
-   * @return the list of attended lessons
+   * @throws RuntimeException if the request fails
    */
   public List<LessonDto> getStudentAttendedLessons(final String studentId) {
     try {

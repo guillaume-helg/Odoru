@@ -17,9 +17,6 @@ import lombok.Setter;
 @Builder
 public class LessonAttendanceDto {
 
-  /** The total number of students present. */
   private int presentCount;
-
-  /** The list of member profiles of the present students. */
   private List<MemberDto> presentStudents;
 }

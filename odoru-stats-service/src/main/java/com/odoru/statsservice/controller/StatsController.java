@@ -23,7 +23,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Controller class exposing statistics endpoints for the Club President.
+ * REST controller exposing statistics endpoints for the Club President.
  */
 @RestController
 @RequestMapping("/api/stats")
@@ -33,16 +33,10 @@ import org.springframework.web.bind.annotation.RestController;
     name = "Stats",
     description = "APIs for club statistics aggregation, restricted to President."
 )
-public class StatsController {
+public final class StatsController {
 
-  /** Stats service dependency. */
   private final StatsService statsService;
 
-  /**
-   * Retrieves overall courses metrics (total count, average student attendance).
-   *
-   * @return the course summary stats
-   */
   @GetMapping("/courses/summary")
   @Operation(
       summary = "Get overall course stats",
@@ -55,12 +49,6 @@ public class StatsController {
     return ResponseEntity.ok(statsService.getCourseSummary());
   }
 
-  /**
-   * Retrieves detail of students present at a given course.
-   *
-   * @param lessonId the unique identifier of the lesson
-   * @return the list and count of attendees
-   */
   @GetMapping("/courses/{lessonId}/attendance")
   @Operation(
       summary = "Get attendees for a course",
@@ -80,14 +68,6 @@ public class StatsController {
     return ResponseEntity.ok(statsService.getLessonAttendance(lessonId));
   }
 
-  /**
-   * Compiles the list of courses for a student with present/absent logs.
-   *
-   * @param studentId the student identifier
-   * @param start optional start date range filter
-   * @param end optional end date range filter
-   * @return the list of course presence logs
-   */
   @GetMapping("/students/{studentId}/attendance")
   @Operation(
       summary = "Get student course presence/absences",
@@ -117,12 +97,6 @@ public class StatsController {
         statsService.getStudentCoursePresence(studentId, start, end));
   }
 
-  /**
-   * Retrieves the count of competitions scheduled for a target expertise level.
-   *
-   * @param level the target expertise level
-   * @return the count of competitions
-   */
   @GetMapping("/competitions/summary")
   @Operation(
       summary = "Get competition count by level",
@@ -137,14 +111,6 @@ public class StatsController {
     return ResponseEntity.ok(statsService.getCompetitionsCountByLevel(level));
   }
 
-  /**
-   * Compiles student's competitions with their achieved results/scores.
-   *
-   * @param studentId the student identifier
-   * @param start optional start date range filter
-   * @param end optional end date range filter
-   * @return the list of competitions with results
-   */
   @GetMapping("/students/{studentId}/competitions")
   @Operation(
       summary = "Get student competition results",
