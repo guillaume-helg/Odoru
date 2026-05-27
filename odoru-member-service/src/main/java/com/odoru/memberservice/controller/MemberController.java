@@ -4,6 +4,7 @@ import com.odoru.memberservice.dto.MemberCreateRequest;
 import com.odoru.memberservice.dto.MemberResponse;
 import com.odoru.memberservice.dto.MemberUpdateRequest;
 import com.odoru.memberservice.dto.RegistrationStatusDto;
+import com.odoru.memberservice.model.MemberRole;
 import com.odoru.memberservice.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -169,13 +170,14 @@ public final class MemberController {
       @ApiResponse(responseCode = "404",
           description = "Member not found with the specified ID")
   })
-  public ResponseEntity<Member> updateRole(
+  public ResponseEntity<MemberResponse> updateRole(
       @Parameter(description = "The unique identifier of the member",
           required = true)
       @PathVariable final String id,
       @Parameter(description = "The new role to assign", required = true)
       @RequestParam final MemberRole role) {
-    return ResponseEntity.ok(memberService.updateMemberRole(id, role));
+    return ResponseEntity.ok(
+        MemberResponse.from(memberService.updateMemberRole(id, role)));
   }
 }
 
