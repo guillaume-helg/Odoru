@@ -92,7 +92,7 @@ async def main():
             maven_member
             .with_service_binding("mongodb", mongodb)
             .with_env_variable("MONGODB_HOST", "mongodb")
-            .with_exec(["mvn", "test", "jacoco:report"])
+            .with_exec(["mvn", "test"])
         )
         await test_member.sync()
 
@@ -101,7 +101,7 @@ async def main():
             maven_lesson
             .with_service_binding("mongodb", mongodb)
             .with_env_variable("MONGODB_HOST", "mongodb")
-            .with_exec(["mvn", "test", "jacoco:report"])
+            .with_exec(["mvn", "test"])
         )
         await test_lesson.sync()
 
@@ -110,7 +110,7 @@ async def main():
             maven_competition
             .with_service_binding("mongodb", mongodb)
             .with_env_variable("MONGODB_HOST", "mongodb")
-            .with_exec(["mvn", "test", "jacoco:report"])
+            .with_exec(["mvn", "test"])
         )
         await test_competition.sync()
 
@@ -119,14 +119,14 @@ async def main():
             maven_badge
             .with_service_binding("mongodb", mongodb)
             .with_env_variable("MONGODB_HOST", "mongodb")
-            .with_exec(["mvn", "test", "jacoco:report"])
+            .with_exec(["mvn", "test"])
         )
         await test_badge.sync()
 
         print("Running unit tests for Stats Service...")
         test_stats = (
             maven_stats
-            .with_exec(["mvn", "test", "jacoco:report"])
+            .with_exec(["mvn", "test"])
         )
         await test_stats.sync()
 
