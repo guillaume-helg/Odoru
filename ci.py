@@ -134,19 +134,29 @@ async def main():
 
         # 6. OpenAPI Generation
         print("Generating OpenAPI spec for Member Service...")
-        build_member = (
-            maven_member
-            .with_service_binding("mongodb", mongodb)
-            .with_env_variable("MONGODB_HOST", "mongodb")
-            .with_exec([
-                "mvn", "clean", "verify", "-DskipTests",
-                "spring-boot:start", "springdoc-openapi:generate",
-                "spring-boot:stop"
-            ])
-        )
-        await build_member.file("target/openapi.json").export(
-            "odoru-member-service/target/openapi.json"
-        )
+        try:
+            build_member = (
+                maven_member
+                .with_service_binding("mongodb", mongodb)
+                .with_env_variable("MONGODB_HOST", "mongodb")
+                .with_exec([
+                    "mvn", "clean", "verify", "-DskipTests",
+                    "spring-boot:start", "springdoc-openapi:generate",
+                    "spring-boot:stop"
+                ])
+            )
+            await build_member.file("target/openapi.json").export(
+                "odoru-member-service/target/openapi.json"
+            )
+        except Exception as e:
+            try:
+                log_content = await maven_member.file("target/spring-boot/run.log").contents()
+                print("--- MEMBER SERVICE STARTUP LOG ---", file=sys.stderr)
+                print(log_content, file=sys.stderr)
+                print("--- END MEMBER SERVICE STARTUP LOG ---", file=sys.stderr)
+            except Exception as log_ex:
+                print(f"Could not read member service run.log: {log_ex}", file=sys.stderr)
+            raise e
 
         print("Generating OpenAPI spec for Lesson Service...")
         build_lesson = (
