@@ -1,0 +1,15 @@
+meta {
+  name: Designate Teacher
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{gateway_url}}/api/members/{{created_teacher_id}}/role?role=TEACHER
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{secretary_token}}
+}

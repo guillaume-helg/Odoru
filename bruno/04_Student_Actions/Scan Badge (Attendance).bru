@@ -1,0 +1,15 @@
+meta {
+  name: Scan Badge (Attendance)
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{gateway_url}}/api/badges/scan?badgeNumber=BADGE-123-456&lessonId={{created_lesson_id}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{student_token}}
+}

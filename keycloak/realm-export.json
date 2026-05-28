@@ -1,0 +1,110 @@
+{
+  "id": "odoru",
+  "realm": "odoru",
+  "enabled": true,
+  "roles": {
+    "realm": [
+      {
+        "name": "PRESIDENT",
+        "description": "Club President role"
+      },
+      {
+        "name": "SECRETARY",
+        "description": "Club Secretary role"
+      },
+      {
+        "name": "TEACHER",
+        "description": "Club Teacher/Instructor role"
+      },
+      {
+        "name": "STUDENT",
+        "description": "Club Student/Member role"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "odoru-services",
+      "enabled": true,
+      "publicClient": true,
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true
+    }
+  ],
+  "users": [
+    {
+      "username": "president",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Prez",
+      "lastName": "Odoru",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "PRESIDENT"
+      ]
+    },
+    {
+      "username": "secretary",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Sec",
+      "lastName": "Odoru",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "SECRETARY"
+      ]
+    },
+    {
+      "username": "teacher",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Teach",
+      "lastName": "Odoru",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "TEACHER"
+      ]
+    },
+    {
+      "username": "student",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Stud",
+      "lastName": "Odoru",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "STUDENT"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Get Lesson Attendance
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{gateway_url}}/api/stats/courses/{{created_lesson_id}}/attendance
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{president_token}}
+}

@@ -6,6 +6,23 @@ services:
     volumes:
       - mongo-data:/data/db
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.2
+    command: start-dev --import-realm
+    ports:
+      - "9090:8080"
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
   member-service:
     build:
       context: ./odoru-member-service
@@ -14,8 +31,97 @@ services:
       - "8080:8080"
     environment:
       - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/odoru_member_db
+      - KEYCLOAK_HOST=keycloak
+      - KEYCLOAK_PORT=8080
     depends_on:
       - mongodb
+      - keycloak
+
+  lesson-service:
+    build:
+      context: ./odoru-lesson-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/odoru_lesson_db
+      - MEMBER_SERVICE_HOST=member-service
+      - KEYCLOAK_HOST=keycloak
+      - KEYCLOAK_PORT=8080
+    depends_on:
+      - mongodb
+      - member-service
+      - keycloak
+
+  competition-service:
+    build:
+      context: ./odoru-competition-service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/odoru_competition_db
+      - MEMBER_SERVICE_HOST=member-service
+      - KEYCLOAK_HOST=keycloak
+      - KEYCLOAK_PORT=8080
+    depends_on:
+      - mongodb
+      - member-service
+      - keycloak
+
+  badge-service:
+    build:
+      context: ./odoru-badge-service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      - MONGODB_HOST=mongodb
+      - MEMBER_SERVICE_HOST=member-service
+      - LESSON_SERVICE_HOST=lesson-service
+      - KEYCLOAK_HOST=keycloak
+      - KEYCLOAK_PORT=8080
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+    depends_on:
+      - mongodb
+      - member-service
+      - lesson-service
+      - keycloak
+      - rabbitmq
+
+  stats-service:
+    build:
+      context: ./odoru-stats-service
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    environment:
+      - MEMBER_SERVICE_HOST=member-service
+      - LESSON_SERVICE_HOST=lesson-service
+      - COMPETITION_SERVICE_HOST=competition-service
+      - BADGE_SERVICE_HOST=badge-service
+      - KEYCLOAK_HOST=keycloak
+      - KEYCLOAK_PORT=8080
+    depends_on:
+      - member-service
+      - lesson-service
+      - competition-service
+      - badge-service
+      - keycloak
+
+  krakend:
+    image: devopsfaith/krakend:latest
+    ports:
+      - "8000:8080"
+    volumes:
+      - ./krakend/krakend.json:/etc/krakend/krakend.json
+    depends_on:
+      - member-service
+      - lesson-service
+      - competition-service
+      - badge-service
+      - stats-service
 
 volumes:
   mongo-data:

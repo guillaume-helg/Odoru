@@ -3,6 +3,9 @@
     "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
     "https://checkstyle.org/dtds/suppressions_1_2.dtd">
 <suppressions>
+  <!-- Spring Boot main class is not a utility class -->
+  <suppress checks="HideUtilityClassConstructor"
+            files="MemberApplication\.java"/>
   <!-- Test classes don't need strict style enforcement -->
   <suppress checks=".*" files=".*Test\.java"/>
 </suppressions>

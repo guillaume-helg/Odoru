@@ -99,12 +99,18 @@ public class MemberService {
       member.setFeePaid(dto.getFeePaid());
     }
     if (dto.getMedicalCertificateProvided() != null) {
-      member.setMedicalCertificateProvided(
-          dto.getMedicalCertificateProvided());
+      member.setMedicalCertificateProvided(dto.getMedicalCertificateProvided());
     }
     if (dto.getRegistrationValidated() != null) {
       member.setRegistrationValidated(dto.getRegistrationValidated());
     }
+    return memberRepository.save(member);
+  }
+
+  public Member updateMemberRole(final String id,
+      final MemberRole role) {
+    Member member = getMemberById(id);
+    member.setRole(role);
     return memberRepository.save(member);
   }
 }
