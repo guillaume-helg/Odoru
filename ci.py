@@ -148,29 +148,19 @@ async def main():
 
         # 6. OpenAPI Generation
         print("Generating OpenAPI spec for Member Service...")
-        try:
-            build_member = (
-                maven_member
-                .with_service_binding("mongodb", mongodb)
-                .with_env_variable("MONGODB_HOST", "mongodb")
-                .with_exec([
-                    "mvn", "clean", "verify", "-DskipTests",
-                    "spring-boot:start", "springdoc-openapi:generate",
-                    "spring-boot:stop"
-                ])
-            )
-            await build_member.file("target/openapi.json").export(
-                "odoru-member-service/target/openapi.json"
-            )
-        except Exception as e:
-            try:
-                log_content = await maven_member.file("target/spring-boot/run.log").contents()
-                print("--- MEMBER SERVICE STARTUP LOG ---", file=sys.stderr)
-                print(log_content, file=sys.stderr)
-                print("--- END MEMBER SERVICE STARTUP LOG ---", file=sys.stderr)
-            except Exception as log_ex:
-                print(f"Could not read member service run.log: {log_ex}", file=sys.stderr)
-            raise e
+        build_member = (
+            maven_member
+            .with_service_binding("mongodb", mongodb)
+            .with_env_variable("MONGODB_HOST", "mongodb")
+            .with_exec([
+                "sh", "-c",
+                "mvn clean verify -DskipTests spring-boot:start springdoc-openapi:generate spring-boot:stop || "
+                "(echo '=== MEMBER SERVICE STARTUP LOG ===' && cat target/spring-boot/run.log && exit 1)"
+            ])
+        )
+        await build_member.file("target/openapi.json").export(
+            "odoru-member-service/target/openapi.json"
+        )
 
         print("Generating OpenAPI spec for Lesson Service...")
         build_lesson = (
@@ -178,9 +168,9 @@ async def main():
             .with_service_binding("mongodb", mongodb)
             .with_env_variable("MONGODB_HOST", "mongodb")
             .with_exec([
-                "mvn", "clean", "verify", "-DskipTests",
-                "spring-boot:start", "springdoc-openapi:generate",
-                "spring-boot:stop"
+                "sh", "-c",
+                "mvn clean verify -DskipTests spring-boot:start springdoc-openapi:generate spring-boot:stop || "
+                "(echo '=== LESSON SERVICE STARTUP LOG ===' && cat target/spring-boot/run.log && exit 1)"
             ])
         )
         await build_lesson.file("target/openapi.json").export(
@@ -193,9 +183,9 @@ async def main():
             .with_service_binding("mongodb", mongodb)
             .with_env_variable("MONGODB_HOST", "mongodb")
             .with_exec([
-                "mvn", "clean", "verify", "-DskipTests",
-                "spring-boot:start", "springdoc-openapi:generate",
-                "spring-boot:stop"
+                "sh", "-c",
+                "mvn clean verify -DskipTests spring-boot:start springdoc-openapi:generate spring-boot:stop || "
+                "(echo '=== COMPETITION SERVICE STARTUP LOG ===' && cat target/spring-boot/run.log && exit 1)"
             ])
         )
         await build_competition.file("target/openapi.json").export(
@@ -208,9 +198,9 @@ async def main():
             .with_service_binding("mongodb", mongodb)
             .with_env_variable("MONGODB_HOST", "mongodb")
             .with_exec([
-                "mvn", "clean", "verify", "-DskipTests",
-                "spring-boot:start", "springdoc-openapi:generate",
-                "spring-boot:stop"
+                "sh", "-c",
+                "mvn clean verify -DskipTests spring-boot:start springdoc-openapi:generate spring-boot:stop || "
+                "(echo '=== BADGE SERVICE STARTUP LOG ===' && cat target/spring-boot/run.log && exit 1)"
             ])
         )
         await build_badge.file("target/openapi.json").export(
@@ -221,9 +211,9 @@ async def main():
         build_stats = (
             maven_stats
             .with_exec([
-                "mvn", "clean", "verify", "-DskipTests",
-                "spring-boot:start", "springdoc-openapi:generate",
-                "spring-boot:stop"
+                "sh", "-c",
+                "mvn clean verify -DskipTests spring-boot:start springdoc-openapi:generate spring-boot:stop || "
+                "(echo '=== STATS SERVICE STARTUP LOG ===' && cat target/spring-boot/run.log && exit 1)"
             ])
         )
         await build_stats.file("target/openapi.json").export(
