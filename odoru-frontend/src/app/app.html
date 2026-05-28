@@ -1,0 +1,108 @@
+<!-- Non-Authenticated Layout (Login / Signup) -->
+@if (!store.isAuthenticated()) {
+  <div class="auth-container">
+    <router-outlet></router-outlet>
+  </div>
+} @else {
+  <!-- Authenticated App Layout -->
+  <div class="app-layout" [class.sidebar-collapsed]="!isSidebarOpen()">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span class="logo-icon">💃</span>
+          <span class="logo-text">Odoru</span>
+        </div>
+      </div>
+
+      <!-- User Profile Details -->
+      <div class="user-profile">
+        <div class="avatar">
+          {{ store.username()?.substring(0, 2)?.toUpperCase() }}
+        </div>
+        <div class="user-info">
+          <div class="username">{{ store.username() }}</div>
+          <div class="role-badge" [class]="'role-badge ' + (store.role()?.toLowerCase() || '')">
+            {{ store.role() }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="nav-menu">
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Dashboard</span>
+        </a>
+
+        <!-- President Operations -->
+        @if (store.role() === 'PRESIDENT') {
+          <div class="menu-divider">Management</div>
+          <a routerLink="/president" routerLinkActive="active" class="nav-item">
+            <span class="nav-icon">👥</span>
+            <span class="nav-label">Members</span>
+          </a>
+        }
+
+        <!-- Secretary Operations -->
+        @if (store.role() === 'SECRETARY') {
+          <div class="menu-divider">Registrations</div>
+          <a routerLink="/secretary" routerLinkActive="active" class="nav-item">
+            <span class="nav-icon">🔑</span>
+            <span class="nav-label">Check-ins & Badges</span>
+          </a>
+        }
+
+        <!-- Teacher Operations -->
+        @if (store.role() === 'TEACHER') {
+          <div class="menu-divider">Classroom</div>
+          <a routerLink="/teacher" routerLinkActive="active" class="nav-item">
+            <span class="nav-icon">📅</span>
+            <span class="nav-label">Lessons & Grading</span>
+          </a>
+        }
+
+        <!-- Student Operations -->
+        @if (store.role() === 'STUDENT') {
+          <div class="menu-divider">Student Portal</div>
+          <a routerLink="/student" routerLinkActive="active" class="nav-item">
+            <span class="nav-icon">🎒</span>
+            <span class="nav-label">My Activities</span>
+          </a>
+        }
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <button (click)="auth.logout()" class="logout-btn">
+          <span class="btn-icon">🚪</span>
+          <span class="btn-label">Sign Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Panel -->
+    <div class="main-panel">
+      <!-- Top Navbar -->
+      <header class="topbar">
+        <button (click)="toggleSidebar()" class="toggle-btn" aria-label="Toggle sidebar">
+          ☰
+        </button>
+        <div class="topbar-title">
+          Odoru Dance Club Platform
+        </div>
+        <div class="topbar-actions">
+          <div class="quick-status">
+            <span class="status-dot"></span>
+            Connected via KrakenD API Gateway
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content Area -->
+      <main class="content">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  </div>
+}

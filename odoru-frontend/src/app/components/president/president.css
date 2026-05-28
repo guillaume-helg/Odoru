@@ -1,0 +1,70 @@
+.president-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Table Name Column */
+.name-td {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-icon {
+  font-size: 1.5rem;
+  opacity: 0.7;
+}
+
+.member-id {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Details Stack */
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.username-span {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.email-span {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Inline Edit Controls */
+.role-select,
+.expertise-select {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  color: var(--text-main);
+  font-size: 0.85rem;
+  cursor: pointer;
+  width: auto;
+}
+
+.role-select:focus,
+.expertise-select:focus {
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Badges Layout */
+.compliance-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.compliance-badges .badge {
+  font-size: 0.65rem;
+  padding: 2px 8px;
+}

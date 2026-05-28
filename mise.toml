@@ -1,0 +1,42 @@
+[tools]
+java = "temurin-26"
+maven = "3.9"
+python = "3.12"
+node = "22"
+
+[tasks.up]
+description = "Start Keycloak, MongoDB, Krakend Gateway, and all services using Docker Compose"
+run = "docker compose up --build -d"
+
+[tasks.down]
+description = "Stop all Docker Compose services"
+run = "docker compose down"
+
+[tasks.test]
+description = "Run unit tests across all microservices"
+run = """
+mvn -f odoru-member-service/pom.xml test && \
+mvn -f odoru-lesson-service/pom.xml test && \
+mvn -f odoru-competition-service/pom.xml test && \
+mvn -f odoru-badge-service/pom.xml test && \
+mvn -f odoru-stats-service/pom.xml test
+"""
+
+[tasks.lint]
+description = "Run checkstyle verification across all microservices"
+run = """
+mvn -f odoru-member-service/pom.xml checkstyle:check && \
+mvn -f odoru-lesson-service/pom.xml checkstyle:check && \
+mvn -f odoru-competition-service/pom.xml checkstyle:check && \
+mvn -f odoru-badge-service/pom.xml checkstyle:check && \
+mvn -f odoru-stats-service/pom.xml checkstyle:check
+"""
+
+[tasks.ci]
+description = "Run local CI pipeline with Dagger"
+run = "python ci.py"
+
+[tasks.frontend]
+description = "Start the Angular frontend development server"
+run = "npm run start"
+dir = "odoru-frontend"

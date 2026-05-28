@@ -13,6 +13,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
@@ -60,7 +62,18 @@ public class SecurityConfig {
         new JwtAuthenticationConverter();
     converter.setJwtGrantedAuthoritiesConverter(
         new KeycloakRoleConverter());
+    converter.setPrincipalClaimName("preferred_username");
     return converter;
+  }
+
+  /**
+   * Password encoder used to hash member credentials at rest.
+   *
+   * @return a BCrypt password encoder
+   */
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
   }
 
   /**

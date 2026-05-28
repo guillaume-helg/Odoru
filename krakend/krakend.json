@@ -7,13 +7,20 @@
     {
       "endpoint": "/api/members",
       "method": "GET",
+      "output_encoding": "no-op",
       "backend": [
         {
           "url_pattern": "/api/members",
-          "host": ["http://member-service:8080"]
+          "host": [
+            "http://member-service:8080"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ]
     },
     {
       "endpoint": "/api/members",
@@ -21,10 +28,17 @@
       "backend": [
         {
           "url_pattern": "/api/members",
-          "host": ["http://member-service:8080"]
+          "host": [
+            "http://member-service:8080"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/members/signup",
@@ -32,10 +46,17 @@
       "backend": [
         {
           "url_pattern": "/api/members/signup",
-          "host": ["http://member-service:8080"]
+          "host": [
+            "http://member-service:8080"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/members/{id}",
@@ -43,10 +64,17 @@
       "backend": [
         {
           "url_pattern": "/api/members/{id}",
-          "host": ["http://member-service:8080"]
+          "host": [
+            "http://member-service:8080"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/members/{id}",
@@ -54,10 +82,17 @@
       "backend": [
         {
           "url_pattern": "/api/members/{id}",
-          "host": ["http://member-service:8080"]
+          "host": [
+            "http://member-service:8080"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/members/{id}",
@@ -65,10 +100,17 @@
       "backend": [
         {
           "url_pattern": "/api/members/{id}",
-          "host": ["http://member-service:8080"]
+          "host": [
+            "http://member-service:8080"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/members/{id}/expertise",
@@ -76,10 +118,17 @@
       "backend": [
         {
           "url_pattern": "/api/members/{id}/expertise",
-          "host": ["http://member-service:8080"]
+          "host": [
+            "http://member-service:8080"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/members/{id}/registration-status",
@@ -87,10 +136,17 @@
       "backend": [
         {
           "url_pattern": "/api/members/{id}/registration-status",
-          "host": ["http://member-service:8080"]
+          "host": [
+            "http://member-service:8080"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/members/{id}/role",
@@ -98,10 +154,17 @@
       "backend": [
         {
           "url_pattern": "/api/members/{id}/role",
-          "host": ["http://member-service:8080"]
+          "host": [
+            "http://member-service:8080"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/lessons",
@@ -109,10 +172,17 @@
       "backend": [
         {
           "url_pattern": "/api/lessons",
-          "host": ["http://lesson-service:8081"]
+          "host": [
+            "http://lesson-service:8081"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/lessons",
@@ -120,10 +190,17 @@
       "backend": [
         {
           "url_pattern": "/api/lessons",
-          "host": ["http://lesson-service:8081"]
+          "host": [
+            "http://lesson-service:8081"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/lessons/{id}",
@@ -131,10 +208,17 @@
       "backend": [
         {
           "url_pattern": "/api/lessons/{id}",
-          "host": ["http://lesson-service:8081"]
+          "host": [
+            "http://lesson-service:8081"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/lessons/teacher/{teacherId}",
@@ -142,10 +226,17 @@
       "backend": [
         {
           "url_pattern": "/api/lessons/teacher/{teacherId}",
-          "host": ["http://lesson-service:8081"]
+          "host": [
+            "http://lesson-service:8081"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/lessons/student/{studentId}",
@@ -153,10 +244,17 @@
       "backend": [
         {
           "url_pattern": "/api/lessons/student/{studentId}",
-          "host": ["http://lesson-service:8081"]
+          "host": [
+            "http://lesson-service:8081"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/competitions",
@@ -164,10 +262,17 @@
       "backend": [
         {
           "url_pattern": "/api/competitions",
-          "host": ["http://competition-service:8082"]
+          "host": [
+            "http://competition-service:8082"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/competitions",
@@ -175,10 +280,17 @@
       "backend": [
         {
           "url_pattern": "/api/competitions",
-          "host": ["http://competition-service:8082"]
+          "host": [
+            "http://competition-service:8082"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/competitions/{id}",
@@ -186,10 +298,17 @@
       "backend": [
         {
           "url_pattern": "/api/competitions/{id}",
-          "host": ["http://competition-service:8082"]
+          "host": [
+            "http://competition-service:8082"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/competitions/student/{studentId}",
@@ -197,10 +316,17 @@
       "backend": [
         {
           "url_pattern": "/api/competitions/student/{studentId}",
-          "host": ["http://competition-service:8082"]
+          "host": [
+            "http://competition-service:8082"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/competitions/{competitionId}/results/{studentId}",
@@ -208,10 +334,17 @@
       "backend": [
         {
           "url_pattern": "/api/competitions/{competitionId}/results/{studentId}",
-          "host": ["http://competition-service:8082"]
+          "host": [
+            "http://competition-service:8082"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/competitions/results/student/{studentId}",
@@ -219,10 +352,17 @@
       "backend": [
         {
           "url_pattern": "/api/competitions/results/student/{studentId}",
-          "host": ["http://competition-service:8082"]
+          "host": [
+            "http://competition-service:8082"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/badges/associate",
@@ -230,10 +370,17 @@
       "backend": [
         {
           "url_pattern": "/api/badges/associate",
-          "host": ["http://badge-service:8083"]
+          "host": [
+            "http://badge-service:8083"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/badges/dissociate/{memberId}",
@@ -241,10 +388,17 @@
       "backend": [
         {
           "url_pattern": "/api/badges/dissociate/{memberId}",
-          "host": ["http://badge-service:8083"]
+          "host": [
+            "http://badge-service:8083"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/badges/scan",
@@ -252,10 +406,17 @@
       "backend": [
         {
           "url_pattern": "/api/badges/scan",
-          "host": ["http://badge-service:8083"]
+          "host": [
+            "http://badge-service:8083"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/badges/attendance/student/{studentId}",
@@ -263,10 +424,17 @@
       "backend": [
         {
           "url_pattern": "/api/badges/attendance/student/{studentId}",
-          "host": ["http://badge-service:8083"]
+          "host": [
+            "http://badge-service:8083"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/badges/attendance/lesson/{lessonId}",
@@ -274,10 +442,17 @@
       "backend": [
         {
           "url_pattern": "/api/badges/attendance/lesson/{lessonId}",
-          "host": ["http://badge-service:8083"]
+          "host": [
+            "http://badge-service:8083"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/stats/courses/summary",
@@ -285,10 +460,17 @@
       "backend": [
         {
           "url_pattern": "/api/stats/courses/summary",
-          "host": ["http://stats-service:8084"]
+          "host": [
+            "http://stats-service:8084"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/stats/courses/{lessonId}/attendance",
@@ -296,10 +478,17 @@
       "backend": [
         {
           "url_pattern": "/api/stats/courses/{lessonId}/attendance",
-          "host": ["http://stats-service:8084"]
+          "host": [
+            "http://stats-service:8084"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/stats/students/{studentId}/attendance",
@@ -307,10 +496,17 @@
       "backend": [
         {
           "url_pattern": "/api/stats/students/{studentId}/attendance",
-          "host": ["http://stats-service:8084"]
+          "host": [
+            "http://stats-service:8084"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/stats/competitions/summary",
@@ -318,10 +514,17 @@
       "backend": [
         {
           "url_pattern": "/api/stats/competitions/summary",
-          "host": ["http://stats-service:8084"]
+          "host": [
+            "http://stats-service:8084"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     },
     {
       "endpoint": "/api/stats/students/{studentId}/competitions",
@@ -329,10 +532,17 @@
       "backend": [
         {
           "url_pattern": "/api/stats/students/{studentId}/competitions",
-          "host": ["http://stats-service:8084"]
+          "host": [
+            "http://stats-service:8084"
+          ],
+          "encoding": "no-op"
         }
       ],
-      "input_headers": ["*"]
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ],
+      "output_encoding": "no-op"
     }
   ]
 }

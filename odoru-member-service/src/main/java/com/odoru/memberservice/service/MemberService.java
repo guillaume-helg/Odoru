@@ -10,6 +10,7 @@ import com.odoru.memberservice.model.MemberRole;
 import com.odoru.memberservice.repository.MemberRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /** Business logic for member registration, updates, and validations. */
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
   private final MemberRepository memberRepository;
+  private final PasswordEncoder passwordEncoder;
 
   public List<Member> getAllMembers() {
     return memberRepository.findAll();
@@ -50,7 +52,7 @@ public class MemberService {
         .lastName(request.getLastName())
         .email(request.getEmail())
         .username(request.getUsername())
-        .password(request.getPassword())
+        .password(passwordEncoder.encode(request.getPassword()))
         .residenceAddress(request.getResidenceAddress())
         .role(MemberRole.MEMBER)
         .build();

@@ -1,0 +1,181 @@
+<div class="student-container fade-in">
+  <!-- Title Header -->
+  <section class="section-header">
+    <div class="header-text">
+      <h2>My Student Portal</h2>
+      <p>Check registration compliance files, view weekly course timetable, see card swipe logs, and check competition results.</p>
+    </div>
+    <button (click)="loadStudentPortal()" class="btn-secondary">
+      🔄 Refresh Portal
+    </button>
+  </section>
+
+  <!-- Alerts -->
+  @if (studentStore.error()) {
+    <div class="alert-box error">
+      ⚠️ {{ studentStore.error() }}
+    </div>
+  }
+
+  <!-- Loading State -->
+  @if (studentStore.loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Retrieving student dashboard data...</p>
+    </div>
+  }
+
+  @if (!studentStore.loading() && studentStore.studentProfile()) {
+    <div class="student-grid">
+      <!-- Left Column: Registration Checklist & Details -->
+      <div class="checklist-column">
+        <div class="portal-card profile-details-card">
+          <h3>Member Profile</h3>
+          <div class="profile-info">
+            <div class="info-row">
+              <span class="info-label">Name</span>
+              <span class="info-value">{{ studentStore.studentProfile()?.firstName }} {{ studentStore.studentProfile()?.lastName }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Expertise Level</span>
+              <span class="info-value badge badge-info">Level {{ studentStore.studentProfile()?.expertiseLevel }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Email</span>
+              <span class="info-value">{{ studentStore.studentProfile()?.email }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="portal-card compliance-checklist-card">
+          <h3>Registration Checklist</h3>
+          <p class="checklist-desc">Complete all three compliance steps to unlock attendance checks:</p>
+          
+          <ul class="checklist-items">
+            <li class="checklist-item" [class.success]="studentStore.studentProfile()?.registrationValidated">
+              <span class="chk-icon">{{ studentStore.studentProfile()?.registrationValidated ? '✅' : '⏳' }}</span>
+              <div class="chk-content">
+                <h4>Profile Verification</h4>
+                <p>{{ studentStore.studentProfile()?.registrationValidated ? 'Validated by Secretary' : 'Awaiting review from Secretary' }}</p>
+              </div>
+            </li>
+            
+            <li class="checklist-item" [class.success]="studentStore.studentProfile()?.feePaid">
+              <span class="chk-icon">{{ studentStore.studentProfile()?.feePaid ? '✅' : '❌' }}</span>
+              <div class="chk-content">
+                <h4>Membership Fee</h4>
+                <p>{{ studentStore.studentProfile()?.feePaid ? 'Payment Confirmed' : 'Payment outstanding' }}</p>
+              </div>
+            </li>
+
+            <li class="checklist-item" [class.success]="studentStore.studentProfile()?.medicalCertificateProvided">
+              <span class="chk-icon">{{ studentStore.studentProfile()?.medicalCertificateProvided ? '✅' : '❌' }}</span>
+              <div class="chk-content">
+                <h4>Medical Certificate</h4>
+                <p>{{ studentStore.studentProfile()?.medicalCertificateProvided ? 'Valid Certificate Uploaded' : 'Please submit medical cert to Secretary' }}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right Column: Schedule, Attendance & Scores -->
+      <div class="activities-column">
+        <!-- Course Agenda -->
+        <div class="portal-card">
+          <h3>My Weekly Timetable</h3>
+          <p class="checklist-desc">Lessons matching your expertise level (Lvl {{ studentStore.studentProfile()?.expertiseLevel }}):</p>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Course</th>
+                  <th>Day</th>
+                  <th>Hours Slot</th>
+                  <th>Location</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (lesson of studentStore.myLessons(); track lesson.id) {
+                  <tr>
+                    <td><strong>{{ lesson.title }}</strong></td>
+                    <td>{{ lesson.dayOfWeek }}</td>
+                    <td>{{ lesson.timeSlot }}</td>
+                    <td>{{ lesson.location }}</td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="4" class="empty-row">No courses scheduled for your level yet.</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Attendance Sweeps -->
+        <div class="portal-card">
+          <h3>RFID Card Attendance History</h3>
+          <p class="checklist-desc">Logs recorded when tapping your badge card at studio doors:</p>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Course Lesson ID</th>
+                  <th>Swipe Timestamp</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (swipe of studentStore.myAttendance(); track swipe.id) {
+                  <tr>
+                    <td><code>{{ swipe.lessonId }}</code></td>
+                    <td>{{ swipe.timestamp | date:'medium' }}</td>
+                    <td><span class="badge badge-success">Present</span></td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="3" class="empty-row">No attendance swipe logs recorded.</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Competition Grades -->
+        <div class="portal-card">
+          <h3>Competition Result Scores</h3>
+          <p class="checklist-desc">Championship evaluation grades logged by your teachers:</p>
+          
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Competition ID</th>
+                  <th>Performance Grade</th>
+                  <th>Evaluator ID</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (res of studentStore.myCompetitionResults(); track res.id || res.competitionId) {
+                  <tr>
+                    <td><code>{{ res.competitionId }}</code></td>
+                    <td><strong class="score-high">{{ res.score | number:'1.2-2' }} / 20.00</strong></td>
+                    <td>{{ res.teacherId }}</td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="3" class="empty-row">No competition scores recorded.</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

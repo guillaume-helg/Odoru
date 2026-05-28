@@ -1,0 +1,131 @@
+<div class="login-wrapper fade-in">
+  <div class="brand-section">
+    <h1>💃 Odoru</h1>
+    <p>Distributed Rhythmic Dance Club Platform</p>
+  </div>
+
+  <div class="card-container">
+    <!-- Messages -->
+    @if (errorMsg()) {
+      <div class="alert-box error">
+        ⚠️ {{ errorMsg() }}
+      </div>
+    }
+    @if (successMsg()) {
+      <div class="alert-box success">
+        ✓ {{ successMsg() }}
+      </div>
+    }
+
+    <!-- Sign In Mode -->
+    @if (mode() === 'signin') {
+      <div class="form-container">
+        <h2>Sign In</h2>
+        <form (ngSubmit)="handleSignin()">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" [(ngModel)]="signinUsername" placeholder="e.g. president" required>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" [(ngModel)]="signinPassword" placeholder="••••••••" required>
+          </div>
+
+          <button type="submit" class="btn-primary login-btn" [disabled]="loading()">
+            {{ loading() ? 'Signing In...' : 'Access Platform' }}
+          </button>
+        </form>
+
+        <div class="toggle-mode-text">
+          New student? <a (click)="toggleMode()">Register profile here</a>
+        </div>
+      </div>
+    }
+
+    <!-- Sign Up Mode (Student Registration) -->
+    @if (mode() === 'signup') {
+      <div class="form-container">
+        <h2>Student Registration</h2>
+        <form (ngSubmit)="handleSignup()">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="reg-username">Username *</label>
+              <input type="text" id="reg-username" name="reg-username" [(ngModel)]="signupUsername" placeholder="dancer99" required>
+            </div>
+            <div class="form-group">
+              <label for="reg-email">Email *</label>
+              <input type="email" id="reg-email" name="reg-email" [(ngModel)]="signupEmail" placeholder="dancer@example.com" required>
+            </div>
+            <div class="form-group">
+              <label for="reg-firstname">First Name *</label>
+              <input type="text" id="reg-firstname" name="reg-firstname" [(ngModel)]="signupFirstName" placeholder="Jane" required>
+            </div>
+            <div class="form-group">
+              <label for="reg-lastname">Last Name *</label>
+              <input type="text" id="reg-lastname" name="reg-lastname" [(ngModel)]="signupLastName" placeholder="Doe" required>
+            </div>
+            <div class="form-group span-2">
+              <label for="reg-expertise">Expertise Level (1-5)</label>
+              <select id="reg-expertise" name="reg-expertise" [(ngModel)]="signupExpertiseLevel">
+                @for (lvl of [1,2,3,4,5]; track lvl) {
+                  <option [value]="lvl">Level {{ lvl }}</option>
+                }
+              </select>
+            </div>
+            <div class="form-group span-2">
+              <label for="reg-street">Street Address</label>
+              <input type="text" id="reg-street" name="reg-street" [(ngModel)]="signupStreet" placeholder="123 Dance Ave">
+            </div>
+            <div class="form-group">
+              <label for="reg-city">City</label>
+              <input type="text" id="reg-city" name="reg-city" [(ngModel)]="signupCity" placeholder="Rhythmville">
+            </div>
+            <div class="form-group">
+              <label for="reg-postal">Postal Code</label>
+              <input type="text" id="reg-postal" name="reg-postal" [(ngModel)]="signupPostalCode" placeholder="12345">
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary login-btn" [disabled]="loading()">
+            {{ loading() ? 'Registering...' : 'Submit Signup Request' }}
+          </button>
+        </form>
+
+        <div class="toggle-mode-text">
+          Already have a profile? <a (click)="toggleMode()">Go to Sign In</a>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Quick Login Section -->
+  @if (mode() === 'signin') {
+    <div class="quick-login-section">
+      <h3>Developer Quick-Login</h3>
+      <p>Select a pre-configured role to immediately authenticate and test permissions:</p>
+      <div class="quick-cards">
+        <div (click)="quickLogin('PRESIDENT')" class="quick-card president">
+          <span class="card-icon">👑</span>
+          <h4>President</h4>
+          <span class="card-user">username: president</span>
+        </div>
+        <div (click)="quickLogin('SECRETARY')" class="quick-card secretary">
+          <span class="card-icon">🔑</span>
+          <h4>Secretary</h4>
+          <span class="card-user">username: secretary</span>
+        </div>
+        <div (click)="quickLogin('TEACHER')" class="quick-card teacher">
+          <span class="card-icon">📅</span>
+          <h4>Teacher</h4>
+          <span class="card-user">username: teacher</span>
+        </div>
+        <div (click)="quickLogin('STUDENT')" class="quick-card student">
+          <span class="card-icon">🎒</span>
+          <h4>Student</h4>
+          <span class="card-user">username: student</span>
+        </div>
+      </div>
+    </div>
+  }
+</div>

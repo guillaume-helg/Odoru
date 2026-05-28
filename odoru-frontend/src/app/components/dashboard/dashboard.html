@@ -1,0 +1,173 @@
+<div class="dashboard-container fade-in">
+  <!-- Welcome Banner -->
+  <section class="welcome-banner">
+    <div class="welcome-text">
+      <h2>Welcome Back, {{ store.username() }}!</h2>
+      <p>Here is the status of the club operations and microservices for your role.</p>
+    </div>
+    <div class="role-badge-large" [class]="'role-badge-large ' + (store.role()?.toLowerCase() || '')">
+      {{ store.role() }} Workspace
+    </div>
+  </section>
+
+  <!-- Error Alert -->
+  @if (statsStore.error()) {
+    <div class="error-alert">
+      ⚠️ {{ statsStore.error() }}
+    </div>
+  }
+
+  <!-- Loading State -->
+  @if (statsStore.loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Retrieving platform telemetry...</p>
+    </div>
+  }
+
+  <!-- KPI Grid (dynamic by role) -->
+  @if (!statsStore.loading()) {
+    <div class="kpi-grid">
+      <!-- PRESIDENT View -->
+      @if (store.role() === 'PRESIDENT') {
+        <div class="kpi-card violet">
+          <div class="kpi-icon">📊</div>
+          <div class="kpi-details">
+            <h3>Total Courses</h3>
+            <span class="kpi-value">{{ statsStore.totalCourses() }}</span>
+            <span class="kpi-trend">Active club courses</span>
+          </div>
+        </div>
+
+        <div class="kpi-card magenta">
+          <div class="kpi-icon">👥</div>
+          <div class="kpi-details">
+            <h3>Avg Attendance</h3>
+            <span class="kpi-value">{{ statsStore.averageAttendance() | number:'1.1-1' }}</span>
+            <span class="kpi-trend">Students per course</span>
+          </div>
+        </div>
+
+        <div class="kpi-card green">
+          <div class="kpi-icon">🏅</div>
+          <div class="kpi-details">
+            <h3>Level 5 Comps</h3>
+            <span class="kpi-value">{{ statsStore.level5Competitions() }}</span>
+            <span class="kpi-trend">Intermediate difficulty</span>
+          </div>
+        </div>
+
+        <div class="kpi-card orange">
+          <div class="kpi-icon">🔥</div>
+          <div class="kpi-details">
+            <h3>Level 10 Comps</h3>
+            <span class="kpi-value">{{ statsStore.level10Competitions() }}</span>
+            <span class="kpi-trend">Advanced championship</span>
+          </div>
+        </div>
+      }
+
+      <!-- SECRETARY View -->
+      @if (store.role() === 'SECRETARY') {
+        <div class="kpi-card red">
+          <div class="kpi-icon">✍️</div>
+          <div class="kpi-details">
+            <h3>Pending Signups</h3>
+            <span class="kpi-value">{{ statsStore.pendingRegistrations() }}</span>
+            <span class="kpi-trend">Awaiting validation</span>
+          </div>
+        </div>
+
+        <div class="kpi-card orange">
+          <div class="kpi-icon">💳</div>
+          <div class="kpi-details">
+            <h3>Unpaid Fees</h3>
+            <span class="kpi-value">{{ statsStore.unpaidFees() }}</span>
+            <span class="kpi-trend">Awaiting payments</span>
+          </div>
+        </div>
+
+        <div class="kpi-card blue">
+          <div class="kpi-icon">🩺</div>
+          <div class="kpi-details">
+            <h3>Missing Medicals</h3>
+            <span class="kpi-value">{{ statsStore.missingMedicalCertificates() }}</span>
+            <span class="kpi-trend">Certificates missing</span>
+          </div>
+        </div>
+      }
+
+      <!-- TEACHER View -->
+      @if (store.role() === 'TEACHER') {
+        <div class="kpi-card green">
+          <div class="kpi-icon">🏫</div>
+          <div class="kpi-details">
+            <h3>My Classes</h3>
+            <span class="kpi-value">{{ statsStore.teacherLessonsCount() }}</span>
+            <span class="kpi-trend">Active scheduled courses</span>
+          </div>
+        </div>
+
+        <div class="kpi-card violet">
+          <div class="kpi-icon">🏆</div>
+          <div class="kpi-details">
+            <h3>Scheduled Comps</h3>
+            <span class="kpi-value">{{ statsStore.teacherCompetitionsCount() }}</span>
+            <span class="kpi-trend">Organized competitions</span>
+          </div>
+        </div>
+      }
+
+      <!-- STUDENT View -->
+      @if (store.role() === 'STUDENT') {
+        <div class="kpi-card blue">
+          <div class="kpi-icon">✨</div>
+          <div class="kpi-details">
+            <h3>Course Swipes</h3>
+            <span class="kpi-value">{{ statsStore.studentPresentCount() }}</span>
+            <span class="kpi-trend">Times badge scanned</span>
+          </div>
+        </div>
+
+        <div class="kpi-card green">
+          <div class="kpi-icon">📈</div>
+          <div class="kpi-details">
+            <h3>Attendance Consistency</h3>
+            <span class="kpi-value">{{ statsStore.studentAttendanceRate() | percent }}</span>
+            <span class="kpi-trend">Target class presence</span>
+          </div>
+        </div>
+
+        <div class="kpi-card orange">
+          <div class="kpi-icon">⭐</div>
+          <div class="kpi-details">
+            <h3>Highest Score</h3>
+            <span class="kpi-value">{{ statsStore.studentBestScore() > 0 ? (statsStore.studentBestScore() | number:'1.2-2') : 'N/A' }}</span>
+            <span class="kpi-trend">Best competition result</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Role Actions Links -->
+  @if (!statsStore.loading()) {
+    <section class="actions-section">
+      <h3>Quick Shortcuts</h3>
+      <div class="shortcut-buttons">
+        @if (store.role() === 'PRESIDENT') {
+          <a routerLink="/president" class="btn-primary">Manage Members Directory</a>
+        }
+        @if (store.role() === 'SECRETARY') {
+          <a routerLink="/secretary" class="btn-primary">Go to Check-ins & Badges</a>
+        }
+        @if (store.role() === 'TEACHER') {
+          <a routerLink="/teacher" class="btn-primary">Schedule Lessons & Grade</a>
+        }
+        @if (store.role() === 'STUDENT') {
+          <a routerLink="/student" class="btn-primary">Open Student Dashboard</a>
+        }
+      </div>
+    </section>
+  }
+</div>

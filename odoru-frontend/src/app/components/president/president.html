@@ -1,0 +1,107 @@
+<div class="president-container fade-in">
+  <!-- Section Title -->
+  <section class="section-header">
+    <div class="header-text">
+      <h2>Club Members Directory</h2>
+      <p>Manage member credentials, update administrative roles, change expertise levels, and moderate the roster.</p>
+    </div>
+    <button (click)="memberStore.loadMembers()" class="btn-secondary">
+      🔄 Refresh Directory
+    </button>
+  </section>
+
+  <!-- Alerts -->
+  @if (memberStore.error()) {
+    <div class="alert-box error">
+      ⚠️ {{ memberStore.error() }}
+    </div>
+  }
+  @if (memberStore.success()) {
+    <div class="alert-box success">
+      ✓ {{ memberStore.success() }}
+    </div>
+  }
+
+  <!-- Loading State -->
+  @if (memberStore.loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Retrieving directory database...</p>
+    </div>
+  }
+
+  <!-- Members Directory Table -->
+  @if (!memberStore.loading() && memberStore.members().length > 0) {
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Username / Email</th>
+            <th>Administrative Role</th>
+            <th>Expertise Level</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (member of memberStore.members(); track member.id) {
+            <tr>
+              <!-- Member Name -->
+              <td class="name-td">
+                <span class="user-icon">👤</span>
+                <div class="fullname">
+                  <strong>{{ member.firstName }} {{ member.lastName }}</strong>
+                  <span class="member-id">ID: {{ member.id }}</span>
+                </div>
+              </td>
+
+              <!-- Username & Email -->
+              <td>
+                <div class="user-details">
+                  <span class="username-span">@{{ member.username }}</span>
+                  <span class="email-span">{{ member.email }}</span>
+                </div>
+              </td>
+
+              <!-- Inline Role Editor -->
+              <td>
+                <select [value]="member.role" (change)="updateRole(member.id, $any($event.target).value)" class="role-select">
+                  <option value="PRESIDENT">President</option>
+                  <option value="SECRETARY">Secretary</option>
+                  <option value="TEACHER">Teacher</option>
+                  <option value="STUDENT">Student</option>
+                </select>
+              </td>
+
+              <!-- Inline Expertise Level -->
+              <td>
+                <select [value]="member.expertiseLevel" (change)="updateExpertise(member.id, $event)" class="expertise-select">
+                  @for (lvl of [1,2,3,4,5]; track lvl) {
+                    <option [value]="lvl">Lvl {{ lvl }}</option>
+                  }
+                </select>
+              </td>
+
+              <!-- Delete Action -->
+              <td>
+                <button (click)="removeMember(member.id)" class="delete-btn" title="Remove member">
+                  🗑️ Remove
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <!-- Empty Directory -->
+  @if (!memberStore.loading() && memberStore.members().length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">📭</span>
+      <h3>No Members Found</h3>
+      <p>No club members exist in the system yet. Ask students to sign up!</p>
+    </div>
+  }
+</div>
+

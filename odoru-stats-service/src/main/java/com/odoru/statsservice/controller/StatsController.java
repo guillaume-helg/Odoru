@@ -1,4 +1,4 @@
-package com.odoru.statsservice.controller;
+ package com.odoru.statsservice.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
     name = "Stats",
     description = "APIs for club statistics aggregation, restricted to President."
 )
-public final class StatsController {
+public class StatsController {
 
   private final StatsService statsService;
 

@@ -37,11 +37,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Members",
     description = "Member management, self-registration, "
         + "and administrative controls")
-public final class MemberController {
+public class MemberController {
 
   private final MemberService memberService;
 
   @GetMapping
+  @PreAuthorize("hasAnyRole('SECRETARY', 'PRESIDENT', 'TEACHER')")
   @Operation(summary = "Get all members")
   public ResponseEntity<List<MemberResponse>> getAllMembers() {
     List<MemberResponse> members = memberService.getAllMembers()
@@ -85,8 +86,10 @@ public final class MemberController {
   }
 
   @PutMapping("/{id}")
+  @PreAuthorize("hasRole('SECRETARY') "
+      + "or @memberSecurity.isSelf(#id, authentication)")
   @Operation(summary = "Update member profile",
-      description = "Updates name and address only")
+      description = "Updates name and address only — self or secretary")
   @ApiResponses({
       @ApiResponse(responseCode = "200",
           description = "Member updated"),

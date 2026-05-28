@@ -6,11 +6,11 @@ meta {
 
 post {
   url: {{keycloak_url}}/realms/odoru/protocol/openid-connect/token
-  body: x-www-form-urlencoded
+  body: formUrlEncoded
   auth: none
 }
 
-body:x-www-form-urlencoded {
+body:form-urlencoded {
   client_id: odoru-services
   grant_type: password
   username: student
@@ -19,6 +19,6 @@ body:x-www-form-urlencoded {
 
 script:post-response {
   if (res.status === 200) {
-    bru.setEnvVar("student_token", res.body.access_token);
+    bru.setVar("student_token", res.body.access_token);
   }
 }
