@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
     name = "Stats",
     description = "APIs for club statistics aggregation, restricted to President."
 )
-public final class StatsController {
+public class StatsController {
 
   private final StatsService statsService;
 

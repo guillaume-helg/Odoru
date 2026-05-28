@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
     name = "Competitions",
     description = "APIs for competition planning and result recording."
 )
-public final class CompetitionController {
+public class CompetitionController {
 
   private final CompetitionService competitionService;
 

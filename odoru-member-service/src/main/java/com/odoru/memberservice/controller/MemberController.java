@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Members",
     description = "Member management, self-registration, "
         + "and administrative controls")
-public final class MemberController {
+public class MemberController {
 
   private final MemberService memberService;
 
