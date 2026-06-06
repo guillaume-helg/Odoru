@@ -40,7 +40,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: openapi-spec
-          path: odoru-member-service/target/openapi.json
+          path: |
+            odoru-member-service/target/openapi.json
+            odoru-lesson-service/target/openapi.json
+            odoru-competition-service/target/openapi.json
+            odoru-badge-service/target/openapi.json
+            odoru-stats-service/target/openapi.json
 
   deploy-swagger:
     name: Deploy Swagger UI to GitHub Pages
@@ -57,7 +62,11 @@ jobs:
       - name: Generate Swagger UI
         run: |
           mkdir -p public
-          cp openapi.json public/openapi.json
+          cp odoru-member-service/target/openapi.json public/member.json
+          cp odoru-lesson-service/target/openapi.json public/lesson.json
+          cp odoru-competition-service/target/openapi.json public/competition.json
+          cp odoru-badge-service/target/openapi.json public/badge.json
+          cp odoru-stats-service/target/openapi.json public/stats.json
           cat > public/index.html <<'EOF'
           <!DOCTYPE html>
           <html lang="en">
@@ -72,7 +81,13 @@ jobs:
               <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js" crossorigin></script>
               <script>
                 window.ui = SwaggerUIBundle({
-                  url: "./openapi.json",
+                  urls: [
+                    { name: "Member Service", url: "./member.json" },
+                    { name: "Lesson Service", url: "./lesson.json" },
+                    { name: "Competition Service", url: "./competition.json" },
+                    { name: "Badge Service", url: "./badge.json" },
+                    { name: "Stats Service", url: "./stats.json" },
+                  ],
                   dom_id: "#swagger-ui",
                 });
               </script>
