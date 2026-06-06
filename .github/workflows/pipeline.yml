@@ -55,10 +55,30 @@ jobs:
           path: .
 
       - name: Generate Swagger UI
-        uses: peter-evans/swagger-ui-action@v3
-        with:
-          output: public
-          spec-file: openapi.json
+        run: |
+          mkdir -p public
+          cp openapi.json public/openapi.json
+          cat > public/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+            <head>
+              <meta charset="UTF-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1" />
+              <title>Odoru API — Swagger UI</title>
+              <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css" />
+            </head>
+            <body>
+              <div id="swagger-ui"></div>
+              <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js" crossorigin></script>
+              <script>
+                window.ui = SwaggerUIBundle({
+                  url: "./openapi.json",
+                  dom_id: "#swagger-ui",
+                });
+              </script>
+            </body>
+          </html>
+          EOF
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
