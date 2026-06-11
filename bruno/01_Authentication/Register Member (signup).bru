@@ -1,0 +1,25 @@
+meta {
+  name: Register Member (signup)
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{gateway_url}}/api/members/signup
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "lastName": "Doe",
+    "firstName": "John",
+    "email": "john.doe@example.com",
+    "username": "jdoe",
+    "password": "s3cur3P@ss",
+    "residenceAddress": {
+      "city": "Paris",
+      "country": "France"
+    }
+  }
+}
