@@ -40,6 +40,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: openapi-spec
+          if-no-files-found: error
           path: |
             odoru-member-service/target/openapi.json
             odoru-lesson-service/target/openapi.json
@@ -61,12 +62,17 @@ jobs:
 
       - name: Generate Swagger UI
         run: |
+          set -euo pipefail
           mkdir -p public
           cp odoru-member-service/target/openapi.json public/member.json
           cp odoru-lesson-service/target/openapi.json public/lesson.json
           cp odoru-competition-service/target/openapi.json public/competition.json
           cp odoru-badge-service/target/openapi.json public/badge.json
           cp odoru-stats-service/target/openapi.json public/stats.json
+          # Fail the deploy if any spec is missing or empty (avoids "No API definition provided")
+          for f in member lesson competition badge stats; do
+            test -s "public/$f.json" || { echo "ERROR: public/$f.json is missing or empty"; exit 1; }
+          done
           cat > public/index.html <<'EOF'
           <!DOCTYPE html>
           <html lang="en">
