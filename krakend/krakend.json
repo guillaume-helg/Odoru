@@ -115,6 +115,9 @@
     {
       "endpoint": "/api/members/{id}/expertise",
       "method": "PATCH",
+      "input_query_strings": [
+        "level"
+      ],
       "backend": [
         {
           "url_pattern": "/api/members/{id}/expertise",
@@ -151,6 +154,9 @@
     {
       "endpoint": "/api/members/{id}/role",
       "method": "PATCH",
+      "input_query_strings": [
+        "role"
+      ],
       "backend": [
         {
           "url_pattern": "/api/members/{id}/role",
@@ -367,6 +373,10 @@
     {
       "endpoint": "/api/badges/associate",
       "method": "POST",
+      "input_query_strings": [
+        "memberId",
+        "badgeNumber"
+      ],
       "backend": [
         {
           "url_pattern": "/api/badges/associate",
@@ -403,6 +413,10 @@
     {
       "endpoint": "/api/badges/scan",
       "method": "POST",
+      "input_query_strings": [
+        "badgeNumber",
+        "lessonId"
+      ],
       "backend": [
         {
           "url_pattern": "/api/badges/scan",
