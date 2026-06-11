@@ -35,8 +35,3 @@ mvn -f odoru-stats-service/pom.xml checkstyle:check
 [tasks.ci]
 description = "Run local CI pipeline with Dagger"
 run = "python ci.py"
-
-[tasks.frontend]
-description = "Start the Angular frontend development server"
-run = "npm run start"
-dir = "odoru-frontend"
