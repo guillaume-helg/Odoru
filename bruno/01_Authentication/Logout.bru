@@ -1,0 +1,26 @@
+meta {
+  name: Logout
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{keycloak_url}}/realms/odoru/protocol/openid-connect/logout
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  client_id: odoru-services
+  refresh_token: {{refresh_token}}
+}
+
+script:post-response {
+  if (res.status === 204 || res.status === 200) {
+    bru.setVar("refresh_token", "");
+    bru.setVar("president_token", "");
+    bru.setVar("secretary_token", "");
+    bru.setVar("teacher_token", "");
+    bru.setVar("student_token", "");
+  }
+}
