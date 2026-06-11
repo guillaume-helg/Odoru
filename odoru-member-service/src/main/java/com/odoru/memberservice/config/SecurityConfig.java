@@ -1,5 +1,6 @@
 package com.odoru.memberservice.config;
 
+import jakarta.servlet.DispatcherType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -41,6 +42,7 @@ public class SecurityConfig {
     http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
+            .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
             .requestMatchers("/v3/api-docs/**", "/swagger-ui/**",
                 "/swagger-ui.html").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/members/signup")
