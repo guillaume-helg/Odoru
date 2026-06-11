@@ -1,0 +1,15 @@
+meta {
+  name: Get User Info
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{keycloak_url}}/realms/odoru/protocol/openid-connect/userinfo
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{access_token}}
+}

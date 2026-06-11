@@ -15,11 +15,13 @@ body:form-urlencoded {
   grant_type: password
   username: president
   password: admin
+  scope: openid
 }
 
 script:post-response {
   if (res.status === 200) {
     bru.setVar("president_token", res.body.access_token);
     bru.setVar("refresh_token", res.body.refresh_token);
+    bru.setVar("access_token", res.body.access_token);
   }
 }
