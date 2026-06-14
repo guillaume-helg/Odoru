@@ -175,6 +175,10 @@
     {
       "endpoint": "/api/lessons",
       "method": "GET",
+      "input_query_strings": [
+        "level",
+        "teacherId"
+      ],
       "backend": [
         {
           "url_pattern": "/api/lessons",
@@ -265,6 +269,10 @@
     {
       "endpoint": "/api/competitions",
       "method": "GET",
+      "input_query_strings": [
+        "level",
+        "teacherId"
+      ],
       "backend": [
         {
           "url_pattern": "/api/competitions",
@@ -337,6 +345,10 @@
     {
       "endpoint": "/api/competitions/{competitionId}/results/{studentId}",
       "method": "POST",
+      "input_query_strings": [
+        "score",
+        "teacherId"
+      ],
       "backend": [
         {
           "url_pattern": "/api/competitions/{competitionId}/results/{studentId}",
@@ -507,6 +519,10 @@
     {
       "endpoint": "/api/stats/students/{studentId}/attendance",
       "method": "GET",
+      "input_query_strings": [
+        "start",
+        "end"
+      ],
       "backend": [
         {
           "url_pattern": "/api/stats/students/{studentId}/attendance",
@@ -525,6 +541,9 @@
     {
       "endpoint": "/api/stats/competitions/summary",
       "method": "GET",
+      "input_query_strings": [
+        "level"
+      ],
       "backend": [
         {
           "url_pattern": "/api/stats/competitions/summary",
@@ -543,6 +562,10 @@
     {
       "endpoint": "/api/stats/students/{studentId}/competitions",
       "method": "GET",
+      "input_query_strings": [
+        "start",
+        "end"
+      ],
       "backend": [
         {
           "url_pattern": "/api/stats/students/{studentId}/competitions",

@@ -16,10 +16,11 @@ public class LessonClient {
   private final RestClient restClient;
 
   public LessonClient(
-      @Value("${odoru.lesson-service.url}") final String lessonServiceUrl) {
+      @Value("${odoru.lesson-service.url}") final String lessonServiceUrl,
+      final JwtPropagationInterceptor jwtInterceptor) {
     this.restClient = RestClient.builder()
         .baseUrl(lessonServiceUrl)
-        .requestInterceptor(new JwtPropagationInterceptor())
+        .requestInterceptor(jwtInterceptor)
         .build();
   }
 

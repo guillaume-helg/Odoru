@@ -15,10 +15,11 @@ public class MemberClient {
   private final RestClient restClient;
 
   public MemberClient(
-      @Value("${odoru.member-service.url}") final String memberServiceUrl) {
+      @Value("${odoru.member-service.url}") final String memberServiceUrl,
+      final JwtPropagationInterceptor jwtInterceptor) {
     this.restClient = RestClient.builder()
         .baseUrl(memberServiceUrl)
-        .requestInterceptor(new JwtPropagationInterceptor())
+        .requestInterceptor(jwtInterceptor)
         .build();
   }
 

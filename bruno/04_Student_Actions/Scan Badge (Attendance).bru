@@ -10,6 +10,15 @@ post {
   auth: bearer
 }
 
+params:query {
+  badgeNumber: BADGE-123-456
+  lessonId: {{created_lesson_id}}
+}
+
 auth:bearer {
   token: {{student_token}}
+}
+
+vars:pre-request {
+  created_lesson_id: 6a2e9059a78882c4d5e42fba
 }

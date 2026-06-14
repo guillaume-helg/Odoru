@@ -13,6 +13,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.client.AuthorizedClientServiceOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,6 +31,30 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+  /**
+   * Configures the OAuth2AuthorizedClientManager for client credentials flow.
+   */
+  @Bean
+  public OAuth2AuthorizedClientManager authorizedClientManager(
+      final ClientRegistrationRepository clientRegistrationRepository,
+      final OAuth2AuthorizedClientService authorizedClientService) {
+
+    final OAuth2AuthorizedClientProvider authorizedClientProvider =
+        OAuth2AuthorizedClientProviderBuilder.builder()
+            .clientCredentials()
+            .build();
+
+    final AuthorizedClientServiceOAuth2AuthorizedClientManager authorizedClientManager =
+        new AuthorizedClientServiceOAuth2AuthorizedClientManager(
+            clientRegistrationRepository, authorizedClientService);
+    authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
+
+    return authorizedClientManager;
+  }
+
+  /**
+   * Configures the security filter chain.
+   */
   @Bean
   public SecurityFilterChain securityFilterChain(final HttpSecurity http)
       throws Exception {
@@ -42,6 +72,9 @@ public class SecurityConfig {
     return http.build();
   }
 
+  /**
+   * Configures the JWT authentication converter with custom role mapping.
+   */
   @Bean
   public JwtAuthenticationConverter jwtAuthenticationConverter() {
     final JwtAuthenticationConverter converter =

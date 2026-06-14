@@ -1,8 +1,8 @@
 package com.odoru.badgeservice.controller;
 
-import java.util.List;
+import com.odoru.badgeservice.config.RabbitMQConfig;
+import com.odoru.badgeservice.dto.AttendanceScanRequest;
 import com.odoru.badgeservice.dto.LessonDto;
-import com.odoru.badgeservice.model.AttendanceLog;
 import com.odoru.badgeservice.model.BadgeAssociation;
 import com.odoru.badgeservice.service.BadgeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,8 +10,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import com.odoru.badgeservice.config.RabbitMQConfig;
-import com.odoru.badgeservice.dto.AttendanceScanRequest;
 
 /**
  * Controller class managing REST API endpoints for badge allocation.
@@ -39,6 +37,9 @@ public class BadgeController {
   private final BadgeService badgeService;
   private final RabbitTemplate rabbitTemplate;
 
+  /**
+   * Links a badge to a member.
+   */
   @PostMapping("/associate")
   @PreAuthorize("hasRole('SECRETARY')")
   @Operation(
@@ -63,6 +64,9 @@ public class BadgeController {
         badgeService.associateBadge(memberId, badgeNumber));
   }
 
+  /**
+   * Unlinks a badge from a member.
+   */
   @PostMapping("/dissociate/{memberId}")
   @PreAuthorize("hasRole('SECRETARY')")
   @Operation(
@@ -84,6 +88,9 @@ public class BadgeController {
     return ResponseEntity.noContent().build();
   }
 
+  /**
+   * Simulates a badge scan by sending a message to RabbitMQ.
+   */
   @PostMapping("/scan")
   @Operation(
       summary = "Simulate a badge scan",
@@ -111,6 +118,9 @@ public class BadgeController {
     return ResponseEntity.accepted().build();
   }
 
+  /**
+   * Retrieves the list of lessons attended by a student.
+   */
   @GetMapping("/attendance/student/{studentId}")
   @Operation(
       summary = "Get attended lessons",
@@ -130,6 +140,9 @@ public class BadgeController {
     return ResponseEntity.ok(badgeService.getStudentLessons(studentId));
   }
 
+  /**
+   * Retrieves the list of members who attended a lesson.
+   */
   @GetMapping("/attendance/lesson/{lessonId}")
   @Operation(
       summary = "Get lesson attendees",

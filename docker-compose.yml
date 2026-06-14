@@ -20,8 +20,15 @@ services:
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_HEALTH_ENABLED=true
     volumes:
       - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   rabbitmq:
     image: rabbitmq:3.13-management
@@ -42,14 +49,14 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/odoru_member_db
+      - MONGODB_HOST=mongodb
       - KEYCLOAK_HOST=keycloak
       - KEYCLOAK_PORT=8080
     depends_on:
       mongodb:
         condition: service_healthy
       keycloak:
-        condition: service_started
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080"]
       interval: 10s
@@ -64,7 +71,7 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/odoru_lesson_db
+      - MONGODB_HOST=mongodb
       - MEMBER_SERVICE_HOST=member-service
       - KEYCLOAK_HOST=keycloak
       - KEYCLOAK_PORT=8080
@@ -74,7 +81,7 @@ services:
       member-service:
         condition: service_healthy
       keycloak:
-        condition: service_started
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8081"]
       interval: 10s
@@ -89,7 +96,7 @@ services:
     ports:
       - "8082:8082"
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/odoru_competition_db
+      - MONGODB_HOST=mongodb
       - MEMBER_SERVICE_HOST=member-service
       - KEYCLOAK_HOST=keycloak
       - KEYCLOAK_PORT=8080
@@ -99,7 +106,7 @@ services:
       member-service:
         condition: service_healthy
       keycloak:
-        condition: service_started
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8082"]
       interval: 10s
@@ -129,7 +136,7 @@ services:
       lesson-service:
         condition: service_healthy
       keycloak:
-        condition: service_started
+        condition: service_healthy
       rabbitmq:
         condition: service_healthy
     healthcheck:
@@ -162,7 +169,7 @@ services:
       badge-service:
         condition: service_healthy
       keycloak:
-        condition: service_started
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8084"]
       interval: 10s

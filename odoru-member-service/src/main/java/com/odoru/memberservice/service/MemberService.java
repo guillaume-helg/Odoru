@@ -53,6 +53,8 @@ public class MemberService {
         .email(request.getEmail())
         .username(request.getUsername())
         .password(passwordEncoder.encode(request.getPassword()))
+        .expertiseLevel(request.getExpertiseLevel() != null
+            ? request.getExpertiseLevel() : 1)
         .residenceAddress(request.getResidenceAddress())
         .role(MemberRole.MEMBER)
         .build();

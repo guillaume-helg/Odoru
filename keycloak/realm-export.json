@@ -24,6 +24,16 @@
   },
   "clients": [
     {
+      "clientId": "odoru-m2m",
+      "enabled": true,
+      "publicClient": false,
+      "serviceAccountsEnabled": true,
+      "secret": "m2m-secret",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "clientAuthenticatorType": "client-secret"
+    },
+    {
       "clientId": "odoru-services",
       "enabled": true,
       "publicClient": true,

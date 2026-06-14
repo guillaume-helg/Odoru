@@ -1,18 +1,30 @@
 package com.odoru.badgeservice.client;
 
 import java.io.IOException;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.stereotype.Component;
 
 /**
  * Interceptor to propagate JWT authentication token to downstream services.
+ * Uses current user's token if available, otherwise fallback to M2M service token.
  */
+@Component
+@RequiredArgsConstructor
 public class JwtPropagationInterceptor implements ClientHttpRequestInterceptor {
+
+  private final OAuth2AuthorizedClientManager authorizedClientManager;
 
   @Override
   public ClientHttpResponse intercept(
@@ -22,9 +34,35 @@ public class JwtPropagationInterceptor implements ClientHttpRequestInterceptor {
 
     final Authentication auth =
         SecurityContextHolder.getContext().getAuthentication();
+
+    String tokenValue = null;
+
+    // 1. Try to get user token from context
     if (auth instanceof JwtAuthenticationToken jwtToken) {
-      request.getHeaders().setBearerAuth(jwtToken.getToken().getTokenValue());
+      tokenValue = jwtToken.getToken().getTokenValue();
     }
+
+    // 2. If no user token, fallback to M2M (Client Credentials)
+    if (tokenValue == null) {
+      tokenValue = getM2mToken();
+    }
+
+    if (tokenValue != null) {
+      request.getHeaders().setBearerAuth(tokenValue);
+    }
+
     return execution.execute(request, body);
+  }
+
+  private String getM2mToken() {
+    final OAuth2AuthorizeRequest authorizeRequest = OAuth2AuthorizeRequest
+        .withClientRegistrationId("odoru-m2m")
+        .principal("odoru-badge-service")
+        .build();
+
+    return Optional.ofNullable(authorizedClientManager.authorize(authorizeRequest))
+        .map(OAuth2AuthorizedClient::getAccessToken)
+        .map(OAuth2AccessToken::getTokenValue)
+        .orElse(null);
   }
 }
