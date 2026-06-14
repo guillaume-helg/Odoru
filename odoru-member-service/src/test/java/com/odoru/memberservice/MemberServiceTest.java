@@ -241,13 +241,46 @@ class MemberServiceTest {
     // --- getAllMembers ---
 
     @Test
-    void getAllMembers_shouldReturnAllMembers() {
+    void getAllMembers_shouldReturnAllMembersWhenNoFilters() {
         when(memberRepository.findAll()).thenReturn(
                 List.of(Member.builder().id("a").build(),
                         Member.builder().id("b").build()));
 
-        List<Member> members = memberService.getAllMembers();
+        List<Member> members = memberService.getAllMembers(null, null, null);
 
         assertEquals(2, members.size());
+    }
+
+    @Test
+    void getAllMembers_shouldFilterByFeePaid() {
+        when(memberRepository.findByFeePaid(true)).thenReturn(
+                List.of(Member.builder().id("a").feePaid(true).build()));
+
+        List<Member> members = memberService.getAllMembers(true, null, null);
+
+        assertEquals(1, members.size());
+        verify(memberRepository).findByFeePaid(true);
+    }
+
+    @Test
+    void getAllMembers_shouldFilterByMedicalCertificate() {
+        when(memberRepository.findByMedicalCertificateProvided(false)).thenReturn(
+                List.of(Member.builder().id("b").medicalCertificateProvided(false).build()));
+
+        List<Member> members = memberService.getAllMembers(null, false, null);
+
+        assertEquals(1, members.size());
+        verify(memberRepository).findByMedicalCertificateProvided(false);
+    }
+
+    @Test
+    void getAllMembers_shouldFilterByRegistrationValidated() {
+        when(memberRepository.findByRegistrationValidated(true)).thenReturn(
+                List.of(Member.builder().id("c").registrationValidated(true).build()));
+
+        List<Member> members = memberService.getAllMembers(null, null, true);
+
+        assertEquals(1, members.size());
+        verify(memberRepository).findByRegistrationValidated(true);
     }
 }

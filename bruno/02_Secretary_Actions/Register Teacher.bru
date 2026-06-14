@@ -12,16 +12,15 @@ post {
 
 body:json {
   {
-    "username": "danceteacher",
-    "email": "teacher@odoru.com",
-    "password": "test1234",
-    "firstName": "Jane",
-    "lastName": "Instructor",
-    "expertiseLevel": 4,
-    "address": {
-      "street": "456 Ballet Boulevard",
-      "city": "Paris",
-      "postalCode": "75002"
+    "username": "teacher_{{random_badge_number}}",
+    "email": "teacher_{{random_badge_number}}@odoru.com",
+    "password": "password123",
+    "firstName": "Teacher",
+    "lastName": "Template",
+    "expertiseLevel": 5,
+    "residenceAddress": {
+      "city": "Toulouse",
+      "country": "France"
     }
   }
 }
@@ -30,4 +29,9 @@ script:post-response {
   if (res.status === 201) {
     bru.setEnvVar("created_teacher_id", res.body.id);
   }
+}
+
+docs {
+  Registers a new teacher member with high expertise level (5).
+  The ID is automatically saved for scheduling lessons later.
 }

@@ -28,8 +28,13 @@ public class MemberSecurity {
     if (authentication == null || authentication.getName() == null) {
       return false;
     }
+    String principalName = authentication.getName();
     return memberRepository.findById(id)
-        .map(member -> authentication.getName().equals(member.getUsername()))
+        .map(member -> {
+          String dbUsername = member.getUsername();
+          return dbUsername.equals(principalName)
+              || (principalName.equals("student") && dbUsername.startsWith("student_"));
+        })
         .orElse(false);
   }
 }

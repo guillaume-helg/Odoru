@@ -36,7 +36,7 @@ public class LessonController {
   private final LessonService lessonService;
 
   @PostMapping
-  @PreAuthorize("hasRole('TEACHER')")
+  @PreAuthorize("hasAnyRole('TEACHER', 'PRESIDENT')")
   @Operation(
       summary = "Schedule a new lesson",
       description = "Enables an instructor to plan a lesson. Ensures "

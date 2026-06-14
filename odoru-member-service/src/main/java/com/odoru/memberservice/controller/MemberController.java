@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,23 +30,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * REST endpoints for member administration and self-registration.
+ * REST controller for member management.
  */
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
-@Tag(name = "Members",
-    description = "Member management, self-registration, "
-        + "and administrative controls")
+@Tag(name = "Members", description = "Member Profile & Registration APIs")
+@Slf4j
 public class MemberController {
 
   private final MemberService memberService;
 
   @GetMapping
   @PreAuthorize("hasAnyRole('SECRETARY', 'PRESIDENT', 'TEACHER')")
-  @Operation(summary = "Get all members")
-  public ResponseEntity<List<MemberResponse>> getAllMembers() {
-    List<MemberResponse> members = memberService.getAllMembers()
+  @Operation(summary = "Get members with optional filters",
+      description = "Retrieve all members or filter by registration status.")
+  public ResponseEntity<List<MemberResponse>> getAllMembers(
+      @Parameter(description = "Filter by fee payment status")
+      @RequestParam(required = false) final Boolean feePaid,
+      @Parameter(description = "Filter by medical certificate status")
+      @RequestParam(required = false)
+      final Boolean medicalCertificateProvided,
+      @Parameter(description = "Filter by registration validation status")
+      @RequestParam(required = false) final Boolean registrationValidated) {
+    log.debug("Fetching members with filters: feePaid={}, medicalCert={}, validated={}",
+        feePaid, medicalCertificateProvided, registrationValidated);
+    List<MemberResponse> members = memberService.getAllMembers(
+            feePaid, medicalCertificateProvided, registrationValidated)
         .stream()
         .map(MemberResponse::from)
         .toList();
@@ -53,6 +64,8 @@ public class MemberController {
   }
 
   @GetMapping("/{id}")
+  @PreAuthorize("hasAnyRole('SECRETARY', 'PRESIDENT', 'TEACHER') "
+      + "or @memberSecurity.isSelf(#id, authentication)")
   @Operation(summary = "Get member by ID")
   @ApiResponses({
       @ApiResponse(responseCode = "200",
@@ -86,10 +99,10 @@ public class MemberController {
   }
 
   @PutMapping("/{id}")
-  @PreAuthorize("hasRole('SECRETARY') "
+  @PreAuthorize("hasAnyRole('SECRETARY', 'PRESIDENT') "
       + "or @memberSecurity.isSelf(#id, authentication)")
   @Operation(summary = "Update member profile",
-      description = "Updates name and address only — self or secretary")
+      description = "Updates name and address only — self or secretary/president")
   @ApiResponses({
       @ApiResponse(responseCode = "200",
           description = "Member updated"),
@@ -105,7 +118,7 @@ public class MemberController {
   }
 
   @PatchMapping("/{id}/expertise")
-  @PreAuthorize("hasRole('SECRETARY')")
+  @PreAuthorize("hasAnyRole('SECRETARY', 'PRESIDENT')")
   @Operation(summary = "Update expertise level (1-5)")
   @ApiResponses({
       @ApiResponse(responseCode = "200",
@@ -126,7 +139,7 @@ public class MemberController {
   }
 
   @PatchMapping("/{id}/registration-status")
-  @PreAuthorize("hasRole('SECRETARY')")
+  @PreAuthorize("hasAnyRole('SECRETARY', 'PRESIDENT')")
   @Operation(summary = "Update registration status",
       description = "Update payment, certificate, and validation flags")
   @ApiResponses({
@@ -147,7 +160,7 @@ public class MemberController {
   }
 
   @DeleteMapping("/{id}")
-  @PreAuthorize("hasRole('SECRETARY')")
+  @PreAuthorize("hasAnyRole('SECRETARY', 'PRESIDENT')")
   @Operation(summary = "Delete a member")
   @ApiResponses({
       @ApiResponse(responseCode = "204",
@@ -163,7 +176,7 @@ public class MemberController {
   }
 
   @PatchMapping("/{id}/role")
-  @PreAuthorize("hasRole('SECRETARY')")
+  @PreAuthorize("hasAnyRole('SECRETARY', 'PRESIDENT')")
   @Operation(summary = "Update member role")
   @ApiResponses({
       @ApiResponse(responseCode = "200",
@@ -183,4 +196,3 @@ public class MemberController {
         MemberResponse.from(memberService.updateMemberRole(id, role)));
   }
 }
-

@@ -8,6 +8,9 @@
       "endpoint": "/api/members",
       "method": "GET",
       "output_encoding": "no-op",
+      "input_query_strings": [
+        "*"
+      ],
       "backend": [
         {
           "url_pattern": "/api/members",
@@ -176,8 +179,7 @@
       "endpoint": "/api/lessons",
       "method": "GET",
       "input_query_strings": [
-        "level",
-        "teacherId"
+        "*"
       ],
       "backend": [
         {
@@ -270,8 +272,7 @@
       "endpoint": "/api/competitions",
       "method": "GET",
       "input_query_strings": [
-        "level",
-        "teacherId"
+        "*"
       ],
       "backend": [
         {
@@ -346,8 +347,7 @@
       "endpoint": "/api/competitions/{competitionId}/results/{studentId}",
       "method": "POST",
       "input_query_strings": [
-        "score",
-        "teacherId"
+        "*"
       ],
       "backend": [
         {
@@ -383,11 +383,28 @@
       "output_encoding": "no-op"
     },
     {
+      "endpoint": "/api/badges",
+      "method": "GET",
+      "output_encoding": "no-op",
+      "backend": [
+        {
+          "url_pattern": "/api/badges",
+          "host": [
+            "http://badge-service:8083"
+          ],
+          "encoding": "no-op"
+        }
+      ],
+      "input_headers": [
+        "Authorization",
+        "Content-Type"
+      ]
+    },
+    {
       "endpoint": "/api/badges/associate",
       "method": "POST",
       "input_query_strings": [
-        "memberId",
-        "badgeNumber"
+        "*"
       ],
       "backend": [
         {
@@ -426,8 +443,7 @@
       "endpoint": "/api/badges/scan",
       "method": "POST",
       "input_query_strings": [
-        "badgeNumber",
-        "lessonId"
+        "*"
       ],
       "backend": [
         {
@@ -483,6 +499,9 @@
     {
       "endpoint": "/api/stats/courses/summary",
       "method": "GET",
+      "input_query_strings": [
+        "*"
+      ],
       "backend": [
         {
           "url_pattern": "/api/stats/courses/summary",
@@ -520,8 +539,7 @@
       "endpoint": "/api/stats/students/{studentId}/attendance",
       "method": "GET",
       "input_query_strings": [
-        "start",
-        "end"
+        "*"
       ],
       "backend": [
         {
@@ -542,7 +560,7 @@
       "endpoint": "/api/stats/competitions/summary",
       "method": "GET",
       "input_query_strings": [
-        "level"
+        "*"
       ],
       "backend": [
         {
@@ -563,8 +581,7 @@
       "endpoint": "/api/stats/students/{studentId}/competitions",
       "method": "GET",
       "input_query_strings": [
-        "start",
-        "end"
+        "*"
       ],
       "backend": [
         {

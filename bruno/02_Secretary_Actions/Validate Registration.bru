@@ -10,10 +10,6 @@ patch {
   auth: bearer
 }
 
-headers {
-  Content-Type: application/json
-}
-
 auth:bearer {
   token: {{secretary_token}}
 }
@@ -24,4 +20,13 @@ body:json {
     "medicalCertificateProvided": true,
     "registrationValidated": true
   }
+}
+
+vars:pre-request {
+  created_student_id: 6a2ec85056e837d434249d04
+}
+
+docs {
+  Updates the registration status flags for a member.
+  Accessible by Secretary and President.
 }

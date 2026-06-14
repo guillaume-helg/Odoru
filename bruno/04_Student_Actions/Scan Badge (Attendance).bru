@@ -1,17 +1,17 @@
 meta {
   name: Scan Badge (Attendance)
   type: http
-  seq: 1
+  seq: 2
 }
 
 post {
-  url: {{gateway_url}}/api/badges/scan?badgeNumber=BADGE-123-456&lessonId={{created_lesson_id}}
+  url: {{gateway_url}}/api/badges/scan
   body: none
   auth: bearer
 }
 
 params:query {
-  badgeNumber: BADGE-123-456
+  badgeNumber: {{random_badge_number}}
   lessonId: {{created_lesson_id}}
 }
 
@@ -20,5 +20,11 @@ auth:bearer {
 }
 
 vars:pre-request {
-  created_lesson_id: 6a2e9059a78882c4d5e42fba
+  random_badge_number: 1
+  created_lesson_id: 6a2ec8a7b6a19aa569f455f0
+}
+
+docs {
+  Simulates a student scanning their badge at a dance studio.
+  This request sends a message via RabbitMQ for asynchronous processing.
 }

@@ -135,4 +135,8 @@ public class BadgeService {
     }
     return studentIds;
   }
+
+  public List<BadgeAssociation> getAllAssociations() {
+    return badgeAssociationRepository.findAll();
+  }
 }

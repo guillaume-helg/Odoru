@@ -1,7 +1,7 @@
 meta {
   name: Get Student Competition Results
   type: http
-  seq: 5
+  seq: 4
 }
 
 get {
@@ -10,6 +10,20 @@ get {
   auth: bearer
 }
 
+params:query {
+  ~start: 2026-06-01T00:00:00
+  ~end: 2026-06-30T23:59:59
+}
+
 auth:bearer {
   token: {{president_token}}
+}
+
+vars:pre-request {
+  created_student_id: 6a2ec85056e837d434249d04
+}
+
+docs {
+  Lists competition results for a specific student.
+  Optional date range filters can be applied.
 }

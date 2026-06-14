@@ -10,29 +10,35 @@ post {
   auth: bearer
 }
 
-headers {
-  Content-Type: application/json
-}
-
 auth:bearer {
   token: {{teacher_token}}
 }
 
 body:json {
   {
-    "title": "Introduction to Rhythmic Dance",
+    "title": "Advanced Rhythmic Patterns",
     "targetLevel": 1,
-    "dayOfWeek": "TUESDAY",
-    "timeSlot": "18:00-19:30",
+    "dayOfWeek": "MONDAY",
+    "timeSlot": "10:00-11:30",
     "duration": 90,
     "teacherId": "{{created_teacher_id}}",
-    "location": "Studio A",
-    "dateTime": "2026-06-22T18:00:00"
+    "location": "Studio B",
+    "dateTime": "2026-06-25T10:00:00"
   }
+}
+
+vars:pre-request {
+  created_teacher_id: 6a2ec85556e837d434249d05
 }
 
 script:post-response {
   if (res.status === 201) {
     bru.setEnvVar("created_lesson_id", res.body.id);
   }
+}
+
+docs {
+  Schedules a new lesson.
+  The teacher's expertise level must be >= targetLevel.
+  The date must be at least 7 days in the future.
 }

@@ -12,22 +12,30 @@ post {
 
 body:json {
   {
-    "username": "dancestudent",
-    "email": "student@odoru.com",
-    "password": "test1234",
-    "firstName": "John",
-    "lastName": "Doe",
-    "expertiseLevel": 3,
-    "address": {
-      "street": "123 Dance Avenue",
-      "city": "Paris",
-      "postalCode": "75001"
+    "username": "student_{{random_badge_number}}",
+    "email": "student_{{random_badge_number}}@odoru.com",
+    "password": "password123",
+    "firstName": "Student",
+    "lastName": "Template",
+    "expertiseLevel": 1,
+    "residenceAddress": {
+      "city": "Toulouse",
+      "country": "France"
     }
   }
+}
+
+vars:pre-request {
+  random_badge_number: 1
 }
 
 script:post-response {
   if (res.status === 201) {
     bru.setEnvVar("created_student_id", res.body.id);
   }
+}
+
+docs {
+  Registers a new student member.
+  The ID is automatically saved to the environment for subsequent steps.
 }

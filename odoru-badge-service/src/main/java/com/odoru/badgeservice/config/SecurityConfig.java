@@ -61,6 +61,7 @@ public class SecurityConfig {
     http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/api/badges/scan").permitAll() // Device simulation
             .requestMatchers("/v3/api-docs/**", "/swagger-ui/**",
                 "/swagger-ui.html").permitAll()
             .anyRequest().authenticated()
@@ -81,6 +82,7 @@ public class SecurityConfig {
         new JwtAuthenticationConverter();
     converter.setJwtGrantedAuthoritiesConverter(
         new KeycloakRoleConverter());
+    converter.setPrincipalClaimName("preferred_username");
     return converter;
   }
 

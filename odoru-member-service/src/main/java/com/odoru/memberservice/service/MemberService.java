@@ -21,8 +21,18 @@ public class MemberService {
   private final MemberRepository memberRepository;
   private final PasswordEncoder passwordEncoder;
 
-  public List<Member> getAllMembers() {
-    return memberRepository.findAll();
+  public List<Member> getAllMembers(final Boolean feePaid,
+      final Boolean medicalCertificateProvided,
+      final Boolean registrationValidated) {
+    List<Member> members = memberRepository.findAll();
+
+    return members.stream()
+        .filter(m -> feePaid == null || m.isFeePaid() == feePaid)
+        .filter(m -> medicalCertificateProvided == null
+            || m.isMedicalCertificateProvided() == medicalCertificateProvided)
+        .filter(m -> registrationValidated == null
+            || m.isRegistrationValidated() == registrationValidated)
+        .toList();
   }
 
   /**

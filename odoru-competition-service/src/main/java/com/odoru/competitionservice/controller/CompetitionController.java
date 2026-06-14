@@ -37,7 +37,7 @@ public class CompetitionController {
   private final CompetitionService competitionService;
 
   @PostMapping
-  @PreAuthorize("hasRole('TEACHER')")
+  @PreAuthorize("hasAnyRole('TEACHER', 'PRESIDENT')")
   @Operation(
       summary = "Schedule a new competition",
       description = "Enables an instructor to plan a competition. Ensures "

@@ -29,6 +29,10 @@ body:json {
   }
 }
 
+vars:pre-request {
+  created_teacher_id: 6a2ec85556e837d434249d05
+}
+
 script:post-response {
   if (res.status === 201) {
     bru.setEnvVar("created_competition_id", res.body.id);

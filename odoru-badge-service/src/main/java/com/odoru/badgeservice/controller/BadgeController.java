@@ -41,11 +41,11 @@ public class BadgeController {
    * Links a badge to a member.
    */
   @PostMapping("/associate")
-  @PreAuthorize("hasRole('SECRETARY')")
+  @PreAuthorize("hasAnyRole('SECRETARY', 'PRESIDENT')")
   @Operation(
       summary = "Associate a badge to a member",
       description = "Links a unique badge number to a member ID. Restricted "
-          + "to Secretary."
+          + "to Secretary or President."
   )
   @ApiResponses({
       @ApiResponse(responseCode = "200",
@@ -68,11 +68,11 @@ public class BadgeController {
    * Unlinks a badge from a member.
    */
   @PostMapping("/dissociate/{memberId}")
-  @PreAuthorize("hasRole('SECRETARY')")
+  @PreAuthorize("hasAnyRole('SECRETARY', 'PRESIDENT')")
   @Operation(
       summary = "Dissociate badge",
       description = "Unlinks the badge associated with the specified member. "
-          + "Restricted to Secretary."
+          + "Restricted to Secretary or President."
   )
   @ApiResponses({
       @ApiResponse(responseCode = "204",
@@ -86,6 +86,19 @@ public class BadgeController {
       @PathVariable final String memberId) {
     badgeService.dissociateBadge(memberId);
     return ResponseEntity.noContent().build();
+  }
+
+  /**
+   * Lists all current badge associations.
+   */
+  @GetMapping
+  @PreAuthorize("hasAnyRole('SECRETARY', 'PRESIDENT')")
+  @Operation(
+      summary = "Get all badge associations",
+      description = "Retrieves the complete list of member-to-badge mappings."
+  )
+  public ResponseEntity<List<BadgeAssociation>> getAllAssociations() {
+    return ResponseEntity.ok(badgeService.getAllAssociations());
   }
 
   /**
