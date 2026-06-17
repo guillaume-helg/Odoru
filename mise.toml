@@ -5,12 +5,26 @@ python = "3.12"
 node = "22"
 
 [tasks.up]
-description = "Start Keycloak, MongoDB, Krakend Gateway, and all services using Docker Compose"
+description = "Build and start Keycloak, MongoDB, Krakend Gateway, and all services using Docker Compose"
 run = "docker compose up --build -d"
+
+[tasks.start]
+description = "Start all Docker Compose services without rebuilding images"
+run = "docker compose up -d"
 
 [tasks.down]
 description = "Stop all Docker Compose services"
 run = "docker compose down"
+
+[tasks.destroy]
+env = { MISE_NO_INSTALL = "1" }
+description = "Completely destroy all containers, volumes, and local images for this project"
+run = "docker compose down -v --rmi local"
+
+[tasks.reset]
+env = { MISE_NO_INSTALL = "1" }
+description = "Wipe everything and recreate the environment from scratch"
+run = "mise run destroy && mise run up"
 
 [tasks.test]
 description = "Run unit tests across all microservices"

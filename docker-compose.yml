@@ -1,10 +1,49 @@
 services:
-  mongodb:
+  member-mongo:
     image: mongo:7.0
     ports:
       - "27017:27017"
     volumes:
-      - mongo-data:/data/db
+      - member-mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  lesson-mongo:
+    image: mongo:7.0
+    ports:
+      - "27018:27017"
+    volumes:
+      - lesson-mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  competition-mongo:
+    image: mongo:7.0
+    ports:
+      - "27019:27017"
+    volumes:
+      - competition-mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  badge-mongo:
+    image: mongo:7.0
+    ports:
+      - "27020:27017"
+    volumes:
+      - badge-mongo-data:/data/db
     healthcheck:
       test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -55,12 +94,12 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - MONGODB_HOST=mongodb
+      - MONGODB_HOST=member-mongo
       - KEYCLOAK_HOST=keycloak
       - KEYCLOAK_PORT=8080
       - JAVA_TOOL_OPTIONS=-Xms128m -Xmx256m
     depends_on:
-      mongodb:
+      member-mongo:
         condition: service_healthy
       keycloak:
         condition: service_healthy
@@ -78,13 +117,13 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - MONGODB_HOST=mongodb
+      - MONGODB_HOST=lesson-mongo
       - MEMBER_SERVICE_HOST=member-service
       - KEYCLOAK_HOST=keycloak
       - KEYCLOAK_PORT=8080
       - JAVA_TOOL_OPTIONS=-Xms128m -Xmx256m
     depends_on:
-      mongodb:
+      lesson-mongo:
         condition: service_healthy
       member-service:
         condition: service_healthy
@@ -104,13 +143,13 @@ services:
     ports:
       - "8082:8082"
     environment:
-      - MONGODB_HOST=mongodb
+      - MONGODB_HOST=competition-mongo
       - MEMBER_SERVICE_HOST=member-service
       - KEYCLOAK_HOST=keycloak
       - KEYCLOAK_PORT=8080
       - JAVA_TOOL_OPTIONS=-Xms128m -Xmx256m
     depends_on:
-      mongodb:
+      competition-mongo:
         condition: service_healthy
       member-service:
         condition: service_healthy
@@ -130,7 +169,7 @@ services:
     ports:
       - "8083:8083"
     environment:
-      - MONGODB_HOST=mongodb
+      - MONGODB_HOST=badge-mongo
       - MEMBER_SERVICE_HOST=member-service
       - LESSON_SERVICE_HOST=lesson-service
       - KEYCLOAK_HOST=keycloak
@@ -139,7 +178,7 @@ services:
       - SPRING_RABBITMQ_PORT=5672
       - JAVA_TOOL_OPTIONS=-Xms128m -Xmx256m
     depends_on:
-      mongodb:
+      badge-mongo:
         condition: service_healthy
       member-service:
         condition: service_healthy
@@ -207,5 +246,8 @@ services:
         condition: service_healthy
 
 volumes:
-  mongo-data:
+  member-mongo-data:
+  lesson-mongo-data:
+  competition-mongo-data:
+  badge-mongo-data:
   rabbitmq-data:
