@@ -16,10 +16,6 @@ import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 
-/**
- * Interceptor to propagate JWT authentication token to downstream services.
- * Uses current user's token if available, otherwise fallback to M2M service token.
- */
 @Component
 @RequiredArgsConstructor
 public class JwtPropagationInterceptor implements ClientHttpRequestInterceptor {
@@ -37,12 +33,10 @@ public class JwtPropagationInterceptor implements ClientHttpRequestInterceptor {
 
     String tokenValue = null;
 
-    // 1. Try to get user token from context
     if (auth instanceof JwtAuthenticationToken jwtToken) {
       tokenValue = jwtToken.getToken().getTokenValue();
     }
 
-    // 2. If no user token, fallback to M2M (Client Credentials)
     if (tokenValue == null) {
       tokenValue = getM2mToken();
     }

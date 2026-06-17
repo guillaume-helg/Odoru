@@ -8,9 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
-/**
- * REST client to communicate with the Competition Service.
- */
 @Component
 public class CompetitionClient {
 
@@ -25,9 +22,6 @@ public class CompetitionClient {
         .build();
   }
 
-  /**
-   * @throws RuntimeException if the request fails
-   */
   public List<CompetitionDto> getAllCompetitions() {
     try {
       final CompetitionDto[] competitions = restClient.get()
@@ -40,9 +34,6 @@ public class CompetitionClient {
     }
   }
 
-  /**
-   * @throws RuntimeException if the request fails
-   */
   public List<CompetitionResultDto> getStudentResults(final String studentId) {
     try {
       final CompetitionResultDto[] results = restClient.get()

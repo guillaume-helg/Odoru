@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/** Partial update of a member's registration status flags. */
 @Getter
 @Setter
 @NoArgsConstructor

@@ -23,17 +23,11 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
-/**
- * Security configuration for Badge Service.
- */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
-  /**
-   * Configures the OAuth2AuthorizedClientManager for client credentials flow.
-   */
   @Bean
   public OAuth2AuthorizedClientManager authorizedClientManager(
       final ClientRegistrationRepository clientRegistrationRepository,
@@ -52,16 +46,13 @@ public class SecurityConfig {
     return authorizedClientManager;
   }
 
-  /**
-   * Configures the security filter chain.
-   */
   @Bean
   public SecurityFilterChain securityFilterChain(final HttpSecurity http)
       throws Exception {
     http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/badges/scan").permitAll() // Device simulation
+            .requestMatchers("/api/badges/scan").permitAll()
             .requestMatchers("/v3/api-docs/**", "/swagger-ui/**",
                 "/swagger-ui.html").permitAll()
             .anyRequest().authenticated()
@@ -73,9 +64,6 @@ public class SecurityConfig {
     return http.build();
   }
 
-  /**
-   * Configures the JWT authentication converter with custom role mapping.
-   */
   @Bean
   public JwtAuthenticationConverter jwtAuthenticationConverter() {
     final JwtAuthenticationConverter converter =

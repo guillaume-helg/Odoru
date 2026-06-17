@@ -8,10 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-/**
- * Read-only response DTO that excludes sensitive fields (password)
- * from API responses.
- */
 @Getter
 @AllArgsConstructor
 @Builder
@@ -51,12 +47,6 @@ public class MemberResponse {
   @Schema(description = "Whether registration has been validated")
   private final boolean registrationValidated;
 
-  /**
-   * Maps a Member entity to its API response representation.
-   *
-   * @param member the entity to convert
-   * @return a MemberResponse without sensitive data
-   */
   public static MemberResponse from(final Member member) {
     return MemberResponse.builder()
         .id(member.getId())

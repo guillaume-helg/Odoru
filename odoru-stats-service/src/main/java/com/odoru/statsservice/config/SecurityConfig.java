@@ -17,73 +17,65 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
-/**
- * Security configuration for Stats Service.
- */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
-  /**
-   * Configures HTTP security filter chain.
-   *
-   * @param http the HttpSecurity to configure
-   * @return the SecurityFilterChain
-   * @throws Exception if an error occurs
-   */
-  @Bean
-  public SecurityFilterChain securityFilterChain(final HttpSecurity http)
-      throws Exception {
-    http
-        .csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**",
-                "/swagger-ui.html").permitAll()
-            .anyRequest().authenticated()
-        )
-        .oauth2ResourceServer(oauth -> oauth
-            .jwt(jwt -> jwt.jwtAuthenticationConverter(
-                jwtAuthenticationConverter()))
-        );
-    return http.build();
-  }
-
-  /**
-   * Configures custom JWT authentication converter.
-   *
-   * @return the JwtAuthenticationConverter
-   */
-  @Bean
-  public JwtAuthenticationConverter jwtAuthenticationConverter() {
-    final JwtAuthenticationConverter converter =
-        new JwtAuthenticationConverter();
-    converter.setJwtGrantedAuthoritiesConverter(
-        new KeycloakRoleConverter());
-    return converter;
-  }
-
-  /**
-   * Converts Keycloak realm access roles to Spring authorities.
-   */
-  private static class KeycloakRoleConverter
-      implements Converter<Jwt, Collection<GrantedAuthority>> {
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public Collection<GrantedAuthority> convert(final Jwt jwt) {
-      final Map<String, Object> realmAccess =
-          jwt.getClaim("realm_access");
-      if (realmAccess == null || realmAccess.isEmpty()) {
-        return Collections.emptyList();
-      }
-      final List<String> roles = (List<String>) realmAccess.get("roles");
-      if (roles == null) {
-        return Collections.emptyList();
-      }
-      return roles.stream()
-          .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-          .collect(Collectors.toList());
+    @Bean
+    public SecurityFilterChain securityFilterChain(final HttpSecurity http)
+        throws Exception {
+        http.csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth ->
+                auth
+                    .requestMatchers(
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html"
+                    )
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated()
+            )
+            .oauth2ResourceServer(oauth ->
+                oauth.jwt(jwt ->
+                    jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())
+                )
+            );
+        return http.build();
     }
-  }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        final JwtAuthenticationConverter converter =
+            new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(
+            new KeycloakRoleConverter()
+        );
+        return converter;
+    }
+
+    private static class KeycloakRoleConverter
+        implements Converter<Jwt, Collection<GrantedAuthority>>
+    {
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public Collection<GrantedAuthority> convert(final Jwt jwt) {
+            final Map<String, Object> realmAccess = jwt.getClaim(
+                "realm_access"
+            );
+            if (realmAccess == null || realmAccess.isEmpty()) {
+                return Collections.emptyList();
+            }
+            final List<String> roles = (List<String>) realmAccess.get("roles");
+            if (roles == null) {
+                return Collections.emptyList();
+            }
+            return roles
+                .stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                .collect(Collectors.toList());
+        }
+    }
 }

@@ -6,9 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * DTO summarizing total courses and average student attendance.
- */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,6 +13,6 @@ import lombok.Setter;
 @Builder
 public class CourseSummaryDto {
 
-  private int totalCourses;
-  private double averageAttendance;
+    private int totalCourses;
+    private double averageAttendance;
 }

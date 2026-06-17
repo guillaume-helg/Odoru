@@ -7,9 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Data Transfer Object representing a member retrieved from Member Service.
- */
 @Getter
 @Setter
 @NoArgsConstructor

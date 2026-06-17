@@ -15,7 +15,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-/** Dance club member entity with registration details. */
 @Document(collection = "members")
 @Getter
 @Setter

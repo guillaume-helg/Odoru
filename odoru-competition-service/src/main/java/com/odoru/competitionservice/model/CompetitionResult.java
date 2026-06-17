@@ -13,9 +13,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-/**
- * Entity representing a student's result/score in a rhythmic dance competition.
- */
 @Document(collection = "competition_results")
 @CompoundIndex(def = "{'competitionId': 1, 'studentId': 1}", unique = true)
 @Getter
@@ -25,22 +22,22 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 public class CompetitionResult {
 
-  private static final long MAX_SCORE_LIMIT = 10L;
+    private static final long MAX_SCORE_LIMIT = 10L;
 
-  @Id
-  private String id;
+    @Id
+    private String id;
 
-  @NotBlank(message = "Competition ID is required")
-  private String competitionId;
+    @NotBlank(message = "Competition ID is required")
+    private String competitionId;
 
-  @NotBlank(message = "Student ID is required")
-  private String studentId;
+    @NotBlank(message = "Student ID is required")
+    private String studentId;
 
-  @NotNull(message = "Score is required")
-  @Min(value = 0, message = "Score must be at least 0.0")
-  @Max(value = MAX_SCORE_LIMIT, message = "Score must be at most 10.0")
-  private Double score;
+    @NotNull(message = "Score is required")
+    @Min(value = 0, message = "Score must be at least 0.0")
+    @Max(value = MAX_SCORE_LIMIT, message = "Score must be at most 10.0")
+    private Double score;
 
-  @NotBlank(message = "Teacher ID is required")
-  private String teacherId;
+    @NotBlank(message = "Teacher ID is required")
+    private String teacherId;
 }

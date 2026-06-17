@@ -7,9 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
-/**
- * REST client to communicate with the Badge Service.
- */
 @Component
 public class BadgeClient {
 
@@ -23,9 +20,6 @@ public class BadgeClient {
         .build();
   }
 
-  /**
-   * @throws RuntimeException if the request fails
-   */
   public List<String> getLessonAttendees(final String lessonId) {
     try {
       final String[] studentIds = restClient.get()
@@ -38,9 +32,6 @@ public class BadgeClient {
     }
   }
 
-  /**
-   * @throws RuntimeException if the request fails
-   */
   public List<LessonDto> getStudentAttendedLessons(final String studentId) {
     try {
       final LessonDto[] lessons = restClient.get()

@@ -7,9 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Data Transfer Object representing a lesson/course slot from Lesson Service.
- */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,11 +14,11 @@ import lombok.Setter;
 @Builder
 public class LessonDto {
 
-  private String id;
-  private String title;
-  private int targetLevel;
-  private LocalDateTime dateTime;
-  private int duration;
-  private String teacherId;
-  private String location;
+    private String id;
+    private String title;
+    private int targetLevel;
+    private LocalDateTime dateTime;
+    private int duration;
+    private String teacherId;
+    private String location;
 }

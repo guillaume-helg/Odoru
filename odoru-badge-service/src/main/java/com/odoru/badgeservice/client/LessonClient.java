@@ -7,9 +7,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 
-/**
- * REST client to communicate with the Lesson Service.
- */
 @Component
 public class LessonClient {
 
@@ -24,11 +21,6 @@ public class LessonClient {
         .build();
   }
 
-  /**
-   * Retrieves a lesson's details by its ID from Lesson Service.
-   *
-   * @throws RuntimeException if the lesson is not found or connection fails
-   */
   public LessonDto getLessonById(final String lessonId) {
     try {
       return restClient.get()

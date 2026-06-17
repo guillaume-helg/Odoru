@@ -17,21 +17,11 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
-/**
- * Security configuration for Competition Service.
- */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
-  /**
-   * Configures HTTP security filter chain.
-   *
-   * @param http the HttpSecurity to configure
-   * @return the SecurityFilterChain
-   * @throws Exception if an error occurs
-   */
   @Bean
   public SecurityFilterChain securityFilterChain(final HttpSecurity http)
       throws Exception {
@@ -49,11 +39,6 @@ public class SecurityConfig {
     return http.build();
   }
 
-  /**
-   * Configures custom JWT authentication converter.
-   *
-   * @return the JwtAuthenticationConverter
-   */
   @Bean
   public JwtAuthenticationConverter jwtAuthenticationConverter() {
     final JwtAuthenticationConverter converter =
@@ -63,9 +48,6 @@ public class SecurityConfig {
     return converter;
   }
 
-  /**
-   * Converts Keycloak realm access roles to Spring authorities.
-   */
   private static class KeycloakRoleConverter
       implements Converter<Jwt, Collection<GrantedAuthority>> {
 

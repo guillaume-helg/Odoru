@@ -29,9 +29,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * REST controller for member management.
- */
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor

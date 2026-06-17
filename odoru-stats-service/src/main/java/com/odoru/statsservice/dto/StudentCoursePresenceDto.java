@@ -6,9 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * DTO representing a student's course attendance status (present or absent).
- */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,6 +13,6 @@ import lombok.Setter;
 @Builder
 public class StudentCoursePresenceDto {
 
-  private LessonDto lesson;
-  private boolean present;
+    private LessonDto lesson;
+    private boolean present;
 }

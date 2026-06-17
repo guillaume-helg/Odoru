@@ -22,9 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Controller class managing REST API endpoints for badge allocation.
- */
 @RestController
 @RequestMapping("/api/badges")
 @RequiredArgsConstructor
@@ -37,9 +34,6 @@ public class BadgeController {
   private final BadgeService badgeService;
   private final RabbitTemplate rabbitTemplate;
 
-  /**
-   * Links a badge to a member.
-   */
   @PostMapping("/associate")
   @PreAuthorize("hasAnyRole('SECRETARY', 'PRESIDENT')")
   @Operation(
@@ -64,9 +58,6 @@ public class BadgeController {
         badgeService.associateBadge(memberId, badgeNumber));
   }
 
-  /**
-   * Unlinks a badge from a member.
-   */
   @PostMapping("/dissociate/{memberId}")
   @PreAuthorize("hasAnyRole('SECRETARY', 'PRESIDENT')")
   @Operation(
@@ -88,9 +79,6 @@ public class BadgeController {
     return ResponseEntity.noContent().build();
   }
 
-  /**
-   * Lists all current badge associations.
-   */
   @GetMapping
   @PreAuthorize("hasAnyRole('SECRETARY', 'PRESIDENT')")
   @Operation(
@@ -101,9 +89,6 @@ public class BadgeController {
     return ResponseEntity.ok(badgeService.getAllAssociations());
   }
 
-  /**
-   * Simulates a badge scan by sending a message to RabbitMQ.
-   */
   @PostMapping("/scan")
   @Operation(
       summary = "Simulate a badge scan",
@@ -131,9 +116,6 @@ public class BadgeController {
     return ResponseEntity.accepted().build();
   }
 
-  /**
-   * Retrieves the list of lessons attended by a student.
-   */
   @GetMapping("/attendance/student/{studentId}")
   @Operation(
       summary = "Get attended lessons",
@@ -153,9 +135,6 @@ public class BadgeController {
     return ResponseEntity.ok(badgeService.getStudentLessons(studentId));
   }
 
-  /**
-   * Retrieves the list of members who attended a lesson.
-   */
   @GetMapping("/attendance/lesson/{lessonId}")
   @Operation(
       summary = "Get lesson attendees",

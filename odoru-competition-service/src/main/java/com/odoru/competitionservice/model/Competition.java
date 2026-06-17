@@ -13,9 +13,6 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-/**
- * Entity representing a scheduled competition in the rhythmic dance club.
- */
 @Document(collection = "competitions")
 @Getter
 @Setter
@@ -24,27 +21,27 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 public class Competition {
 
-  private static final int MAX_TARGET_LEVEL = 5;
+    private static final int MAX_TARGET_LEVEL = 5;
 
-  @Id
-  private String id;
+    @Id
+    private String id;
 
-  @NotBlank(message = "Title is required")
-  private String title;
+    @NotBlank(message = "Title is required")
+    private String title;
 
-  @Min(value = 1, message = "Target level must be at least 1")
-  @Max(value = MAX_TARGET_LEVEL, message = "Target level must be at most 5")
-  private int targetLevel;
+    @Min(value = 1, message = "Target level must be at least 1")
+    @Max(value = MAX_TARGET_LEVEL, message = "Target level must be at most 5")
+    private int targetLevel;
 
-  @NotNull(message = "Date and time are required")
-  private LocalDateTime dateTime;
+    @NotNull(message = "Date and time are required")
+    private LocalDateTime dateTime;
 
-  @Min(value = 1, message = "Duration must be at least 1 minute")
-  private int duration;
+    @Min(value = 1, message = "Duration must be at least 1 minute")
+    private int duration;
 
-  @NotBlank(message = "Teacher ID is required")
-  private String teacherId;
+    @NotBlank(message = "Teacher ID is required")
+    private String teacherId;
 
-  @NotBlank(message = "Location is required")
-  private String location;
+    @NotBlank(message = "Location is required")
+    private String location;
 }

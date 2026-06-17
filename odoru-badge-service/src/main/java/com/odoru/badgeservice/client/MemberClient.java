@@ -6,9 +6,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 
-/**
- * REST client to communicate with the Member Service.
- */
 @Component
 public class MemberClient {
 
@@ -23,11 +20,6 @@ public class MemberClient {
         .build();
   }
 
-  /**
-   * Verifies if a member exists by calling the Member Service.
-   *
-   * @throws RuntimeException if the member is not found or connection fails
-   */
   public void verifyMemberExists(final String memberId) {
     try {
       restClient.get()

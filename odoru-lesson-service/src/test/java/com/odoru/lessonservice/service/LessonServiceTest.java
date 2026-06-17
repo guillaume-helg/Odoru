@@ -22,9 +22,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-/**
- * Unit tests for the LessonService class.
- */
 @ExtendWith(MockitoExtension.class)
 public class LessonServiceTest {
 
@@ -37,9 +34,6 @@ public class LessonServiceTest {
   @InjectMocks
   private LessonService lessonService;
 
-  /**
-   * Tests scheduling a valid lesson.
-   */
   @Test
   public void testCreateLesson_Success() {
     final Lesson lesson = Lesson.builder()
@@ -67,9 +61,6 @@ public class LessonServiceTest {
     verify(lessonRepository).save(lesson);
   }
 
-  /**
-   * Tests that scheduling a lesson less than 7 days in advance fails.
-   */
   @Test
   public void testCreateLesson_InvalidDate() {
     final Lesson lesson = Lesson.builder()
@@ -88,9 +79,6 @@ public class LessonServiceTest {
     verify(lessonRepository, never()).save(any());
   }
 
-  /**
-   * Tests that scheduling a lesson with a non-teacher member fails.
-   */
   @Test
   public void testCreateLesson_NotATeacher() {
     final Lesson lesson = Lesson.builder()
@@ -116,10 +104,6 @@ public class LessonServiceTest {
     verify(lessonRepository, never()).save(any());
   }
 
-  /**
-   * Tests that scheduling a lesson with a teacher whose expertise level is
-   * too low fails.
-   */
   @Test
   public void testCreateLesson_ExpertiseLevelTooLow() {
     final Lesson lesson = Lesson.builder()
@@ -145,9 +129,6 @@ public class LessonServiceTest {
     verify(lessonRepository, never()).save(any());
   }
 
-  /**
-   * Tests retrieving lessons for a student de facto matching their level.
-   */
   @Test
   public void testGetLessonsForStudent_Success() {
     final MemberDto student = MemberDto.builder()

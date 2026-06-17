@@ -6,9 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Data Transfer Object representing a competition result from Competition Service.
- */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,9 +13,9 @@ import lombok.Setter;
 @Builder
 public class CompetitionResultDto {
 
-  private String id;
-  private String competitionId;
-  private String studentId;
-  private Double score;
-  private String teacherId;
+    private String id;
+    private String competitionId;
+    private String studentId;
+    private Double score;
+    private String teacherId;
 }

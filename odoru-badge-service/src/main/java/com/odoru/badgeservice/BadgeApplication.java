@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/** Entry point for the Spring Boot Badge Application service. */
 @SpringBootApplication
 @OpenAPIDefinition(
     info = @Info(
@@ -17,7 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SuppressWarnings("checkstyle:HideUtilityClassConstructor")
 public class BadgeApplication {
 
-  public static void main(final String[] args) {
-    SpringApplication.run(BadgeApplication.class, args);
-  }
+    public static void main(final String[] args) {
+        SpringApplication.run(BadgeApplication.class, args);
+    }
 }

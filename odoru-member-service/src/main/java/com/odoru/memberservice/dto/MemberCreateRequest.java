@@ -13,11 +13,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Request DTO for new member registration. Exposes only the fields
- * a user is allowed to set during signup — role, fees, and
- * administrative flags are controlled server-side.
- */
 @Getter
 @Setter
 @NoArgsConstructor

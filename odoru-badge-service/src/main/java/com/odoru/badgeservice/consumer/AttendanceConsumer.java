@@ -8,27 +8,31 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-/**
- * Message consumer that processes badge attendance scans asynchronously.
- */
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class AttendanceConsumer {
 
-  private final BadgeService badgeService;
+    private final BadgeService badgeService;
 
-  @RabbitListener(queues = RabbitMQConfig.ATTENDANCE_QUEUE)
-  public void processAttendanceScan(final AttendanceScanRequest request) {
-    log.info("Received async badge scan event: {}", request);
-    try {
-      badgeService.logAttendance(request.getBadgeNumber(),
-          request.getLessonId());
-      log.info("Successfully processed attendance scan for badge: {}",
-          request.getBadgeNumber());
-    } catch (Exception ex) {
-      log.error("Failed to process attendance scan for request: {}",
-          request, ex);
+    @RabbitListener(queues = RabbitMQConfig.ATTENDANCE_QUEUE)
+    public void processAttendanceScan(final AttendanceScanRequest request) {
+        log.info("Received async badge scan event: {}", request);
+        try {
+            badgeService.logAttendance(
+                request.getBadgeNumber(),
+                request.getLessonId()
+            );
+            log.info(
+                "Successfully processed attendance scan for badge: {}",
+                request.getBadgeNumber()
+            );
+        } catch (Exception ex) {
+            log.error(
+                "Failed to process attendance scan for request: {}",
+                request,
+                ex
+            );
+        }
     }
-  }
 }

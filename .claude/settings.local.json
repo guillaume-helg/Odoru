@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($m = \\(Get-Command mvn -ErrorAction SilentlyContinue\\); if \\($m\\) { $m.Source } else { \"no-mvn\" }; \\(Get-Command java -ErrorAction SilentlyContinue\\).Source; if \\(Test-Path .\\\\mise.toml\\) { Get-Content .\\\\mise.toml })",
+      "PowerShell(mise exec -- mvn -f C:\\\\Users\\\\guill\\\\Documents\\\\Project\\\\Odoru\\\\odoru-member-service\\\\pom.xml test \"-Dsonar.skip\" 2>&1)",
+      "Bash(git rev-list *)",
+      "Bash(git commit --amend -q -m 'ci: build Swagger UI from swagger-ui-dist CDN instead of missing action *)",
+      "Bash(git fetch *)",
+      "Bash(git log *)",
+      "Bash(git branch *)",
+      "Bash(git push *)",
+      "Bash(gh auth *)",
+      "Bash(gh api *)",
+      "Bash(git commit *)",
+      "Bash(echo \"duplicate attempt \\(janex already created above\\):\")",
+      "Bash(curl -s -w '\\\\nHTTP %{http_code}\\\\n' -X POST http://localhost:8080/api/members/signup -H 'Content-Type: application/json' -d '{\"lastName\":\"Doe\",\"firstName\":\"John\",\"email\":\"jane.x@example.com\",\"username\":\"janex\",\"password\":\"s3cur3P@ss\",\"residenceAddress\":{\"city\":\"Paris\",\"country\":\"France\"}}')"
+    ]
+  }
+}

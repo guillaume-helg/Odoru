@@ -9,9 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
-/**
- * Interceptor to propagate JWT authentication token to downstream services.
- */
 public class JwtPropagationInterceptor implements ClientHttpRequestInterceptor {
 
   @Override

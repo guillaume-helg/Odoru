@@ -7,11 +7,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-/**
- * Formats error responses for API endpoints. {@link MemberNotFoundException}
- * and {@link DuplicateFieldException} are handled natively by Spring
- * via {@link org.springframework.web.server.ResponseStatusException}.
- */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

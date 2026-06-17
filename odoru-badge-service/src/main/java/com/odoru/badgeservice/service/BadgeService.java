@@ -14,9 +14,6 @@ import com.odoru.badgeservice.repository.BadgeAssociationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-/**
- * Service class handling business logic for badge association and attendance.
- */
 @Service
 @RequiredArgsConstructor
 public class BadgeService {
@@ -26,17 +23,11 @@ public class BadgeService {
   private final MemberClient memberClient;
   private final LessonClient lessonClient;
 
-  /**
-   * Associates a badge with a member.
-   *
-   * @throws IllegalArgumentException if the badge number is already assigned to someone else
-   */
   public BadgeAssociation associateBadge(
       final String memberId, final String badgeNumber) {
-    // 1. Verify member exists in Member Service
+
     memberClient.verifyMemberExists(memberId);
 
-    // 2. Verify badge is not in use by someone else
     final Optional<BadgeAssociation> existingBadge =
         badgeAssociationRepository.findByBadgeNumber(badgeNumber);
     if (existingBadge.isPresent()
@@ -45,7 +36,6 @@ public class BadgeService {
           "Badge number is already assigned to another member");
     }
 
-    // 3. Find existing association for member or create a new one
     final BadgeAssociation association = badgeAssociationRepository
         .findByMemberId(memberId)
         .orElseGet(() -> BadgeAssociation.builder()
@@ -56,11 +46,6 @@ public class BadgeService {
     return badgeAssociationRepository.save(association);
   }
 
-  /**
-   * Dissociates a badge from its owner.
-   *
-   * @throws IllegalArgumentException if no badge association exists for the member
-   */
   public void dissociateBadge(final String memberId) {
     final BadgeAssociation association = badgeAssociationRepository
         .findByMemberId(memberId)
@@ -69,14 +54,9 @@ public class BadgeService {
     badgeAssociationRepository.delete(association);
   }
 
-  /**
-   * Logs a student attendance via badge swiping at a lesson.
-   *
-   * @throws IllegalArgumentException if the badge number is unrecognized
-   */
   public AttendanceLog logAttendance(
       final String badgeNumber, final String lessonId) {
-    // 1. Resolve badge to member ID
+
     final BadgeAssociation association = badgeAssociationRepository
         .findByBadgeNumber(badgeNumber)
         .orElseThrow(() -> new IllegalArgumentException(
@@ -84,17 +64,14 @@ public class BadgeService {
 
     final String memberId = association.getMemberId();
 
-    // 2. Verify lesson exists in Lesson Service
     lessonClient.getLessonById(lessonId);
 
-    // 3. Prevent duplicate scans
     final Optional<AttendanceLog> existingLog = attendanceLogRepository
         .findByMemberIdAndLessonId(memberId, lessonId);
     if (existingLog.isPresent()) {
       return existingLog.get();
     }
 
-    // 4. Save scan
     final AttendanceLog log = AttendanceLog.builder()
         .memberId(memberId)
         .lessonId(lessonId)
@@ -105,7 +82,7 @@ public class BadgeService {
   }
 
   public List<LessonDto> getStudentLessons(final String studentId) {
-    // Verify student exists
+
     memberClient.verifyMemberExists(studentId);
 
     final List<AttendanceLog> logs = attendanceLogRepository
@@ -116,14 +93,14 @@ public class BadgeService {
       try {
         lessons.add(lessonClient.getLessonById(log.getLessonId()));
       } catch (Exception ex) {
-        // Skip or handle missing lessons (e.g. if a lesson was deleted)
+
       }
     }
     return lessons;
   }
 
   public List<String> getLessonAttendees(final String lessonId) {
-    // 1. Verify lesson exists in Lesson Service
+
     lessonClient.getLessonById(lessonId);
 
     final List<AttendanceLog> logs = attendanceLogRepository

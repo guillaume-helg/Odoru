@@ -6,9 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * DTO representing a student's competition result (with their optional score).
- */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,6 +13,6 @@ import lombok.Setter;
 @Builder
 public class StudentCompetitionResultDto {
 
-  private CompetitionDto competition;
-  private Double score;
+    private CompetitionDto competition;
+    private Double score;
 }

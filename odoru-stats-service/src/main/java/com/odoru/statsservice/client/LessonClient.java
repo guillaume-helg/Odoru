@@ -9,9 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 
-/**
- * REST client to communicate with the Lesson Service.
- */
 @Component
 public class LessonClient {
 
@@ -25,9 +22,6 @@ public class LessonClient {
         .build();
   }
 
-  /**
-   * @throws RuntimeException if the request fails
-   */
   public List<LessonDto> getAllLessons() {
     try {
       final LessonDto[] lessons = restClient.get()
@@ -40,9 +34,6 @@ public class LessonClient {
     }
   }
 
-  /**
-   * @throws RuntimeException if the lesson is not found or connection fails
-   */
   public LessonDto getLessonById(final String id) {
     try {
       return restClient.get()

@@ -10,9 +10,6 @@ import com.odoru.lessonservice.repository.LessonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-/**
- * Service class handling business logic for lesson planning and slot lookup.
- */
 @Service
 @RequiredArgsConstructor
 public class LessonService {
@@ -22,13 +19,8 @@ public class LessonService {
   private final LessonRepository lessonRepository;
   private final MemberClient memberClient;
 
-  /**
-   * Creates a new lesson after validating all business rules.
-   *
-   * @throws IllegalArgumentException if date is too close or assigned member is not a teacher/not qualified
-   */
   public Lesson createLesson(final Lesson lesson) {
-    // 1. Date check: must be >= 7 days in advance
+
     final LocalDate minAllowedDate = LocalDate.now()
         .plusDays(MIN_DAYS_IN_ADVANCE);
     if (lesson.getDateTime().toLocalDate().isBefore(minAllowedDate)) {
@@ -36,7 +28,6 @@ public class LessonService {
           "Lesson date must be at least 7 days in the future");
     }
 
-    // 2. Fetch and validate teacher
     final MemberDto teacher = memberClient.getMemberById(
         lesson.getTeacherId());
 
@@ -66,19 +57,11 @@ public class LessonService {
     return lessonRepository.findByTeacherId(teacherId);
   }
 
-  /**
-   * Retrieves all lessons a student is enrolled in de facto.
-   * "Les élèves d’un niveau X sont de facto inscrits à tous les cours de
-   * niveau X."
-   */
   public List<Lesson> getLessonsForStudent(final String studentId) {
     final MemberDto student = memberClient.getMemberById(studentId);
     return getLessonsByLevel(student.getExpertiseLevel());
   }
 
-  /**
-   * @throws RuntimeException if the lesson is not found
-   */
   public Lesson getLessonById(final String id) {
     return lessonRepository.findById(id)
         .orElseThrow(() -> new RuntimeException(

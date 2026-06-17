@@ -37,8 +37,6 @@ class MemberServiceTest {
     @InjectMocks
     private MemberService memberService;
 
-    // --- registerMember ---
-
     @Test
     void registerMember_shouldSaveAndReturnMemberWithDefaultRole() {
         MemberCreateRequest request = MemberCreateRequest.builder()
@@ -97,8 +95,6 @@ class MemberServiceTest {
         verify(memberRepository, never()).save(any());
     }
 
-    // --- getMemberById ---
-
     @Test
     void getMemberById_shouldReturnMemberWhenExists() {
         Member member = Member.builder().id("abc").firstName("Jane").build();
@@ -116,8 +112,6 @@ class MemberServiceTest {
         assertThrows(MemberNotFoundException.class,
                 () -> memberService.getMemberById("missing"));
     }
-
-    // --- updateMember ---
 
     @Test
     void updateMember_shouldUpdateAllowedFields() {
@@ -143,8 +137,6 @@ class MemberServiceTest {
         assertEquals("Paris", updated.getResidenceAddress().getCity());
     }
 
-    // --- updateExpertiseLevel ---
-
     @Test
     void updateExpertiseLevel_shouldUpdateWhenValid() {
         Member member = Member.builder().id("abc").expertiseLevel(1).build();
@@ -167,8 +159,6 @@ class MemberServiceTest {
         verify(memberRepository, never()).findById(anyString());
     }
 
-    // --- deleteMember ---
-
     @Test
     void deleteMember_shouldDeleteWhenExists() {
         Member member = Member.builder().id("abc").build();
@@ -187,8 +177,6 @@ class MemberServiceTest {
                 () -> memberService.deleteMember("missing"));
         verify(memberRepository, never()).deleteById(anyString());
     }
-
-    // --- updateRegistrationStatus ---
 
     @Test
     void updateRegistrationStatus_shouldUpdateAllFields() {
@@ -237,8 +225,6 @@ class MemberServiceTest {
         assertFalse(updated.isMedicalCertificateProvided());
         assertTrue(updated.isRegistrationValidated());
     }
-
-    // --- getAllMembers ---
 
     @Test
     void getAllMembers_shouldReturnAllMembersWhenNoFilters() {

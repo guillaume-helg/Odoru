@@ -1,8 +1,5 @@
 package com.odoru.statsservice.dto;
 
-/**
- * Data Transfer Object representing a member profile from Member Service.
- */
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

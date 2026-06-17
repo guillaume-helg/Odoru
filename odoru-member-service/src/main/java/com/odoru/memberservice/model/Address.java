@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/** Value object for a member's residence address. */
 @Getter
 @Setter
 @NoArgsConstructor

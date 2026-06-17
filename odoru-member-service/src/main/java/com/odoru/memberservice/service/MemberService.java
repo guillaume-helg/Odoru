@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-/** Business logic for member registration, updates, and validations. */
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -35,19 +34,11 @@ public class MemberService {
         .toList();
   }
 
-  /**
-   * @throws MemberNotFoundException if no member exists with given id
-   */
   public Member getMemberById(final String id) {
     return memberRepository.findById(id)
         .orElseThrow(() -> new MemberNotFoundException(id));
   }
 
-  /**
-   * Registers a new member from a create request.
-   *
-   * @throws DuplicateFieldException if email or username already taken
-   */
   public Member registerMember(final MemberCreateRequest request) {
     if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
       throw new DuplicateFieldException("Email");
@@ -72,7 +63,6 @@ public class MemberService {
     return memberRepository.save(member);
   }
 
-  /** Updates only name and address fields. */
   public Member updateMember(final String id,
       final MemberUpdateRequest request) {
     Member member = getMemberById(id);
@@ -82,9 +72,6 @@ public class MemberService {
     return memberRepository.save(member);
   }
 
-  /**
-   * @throws IllegalArgumentException if level is outside 1-5 range
-   */
   public Member updateExpertiseLevel(final String id,
       final int newLevel) {
     if (newLevel < 1 || newLevel > Member.MAX_EXPERTISE_LEVEL) {
@@ -97,15 +84,11 @@ public class MemberService {
     return memberRepository.save(member);
   }
 
-  /**
-   * @throws MemberNotFoundException if member does not exist
-   */
   public void deleteMember(final String id) {
     getMemberById(id);
     memberRepository.deleteById(id);
   }
 
-  /** Partial update of registration flags (fee, certificate, validation). */
   public Member updateRegistrationStatus(final String id,
       final RegistrationStatusDto dto) {
     Member member = getMemberById(id);

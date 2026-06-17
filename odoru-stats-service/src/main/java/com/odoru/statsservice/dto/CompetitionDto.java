@@ -7,9 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Data Transfer Object representing a competition from Competition Service.
- */
 @Getter
 @Setter
 @NoArgsConstructor

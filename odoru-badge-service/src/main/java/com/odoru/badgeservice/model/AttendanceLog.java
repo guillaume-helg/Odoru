@@ -12,9 +12,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-/**
- * Entity logging the presence of a student at a course/lesson session.
- */
 @Document(collection = "attendance_logs")
 @CompoundIndex(def = "{'memberId': 1, 'lessonId': 1}", unique = true)
 @Getter
@@ -24,15 +21,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 public class AttendanceLog {
 
-  @Id
-  private String id;
+    @Id
+    private String id;
 
-  @NotBlank(message = "Member ID is required")
-  private String memberId;
+    @NotBlank(message = "Member ID is required")
+    private String memberId;
 
-  @NotBlank(message = "Lesson ID is required")
-  private String lessonId;
+    @NotBlank(message = "Lesson ID is required")
+    private String lessonId;
 
-  @NotNull(message = "Timestamp is required")
-  private LocalDateTime timestamp;
+    @NotNull(message = "Timestamp is required")
+    private LocalDateTime timestamp;
 }

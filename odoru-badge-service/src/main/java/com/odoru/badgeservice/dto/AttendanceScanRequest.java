@@ -7,20 +7,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Data transfer object representing an asynchronous badge swiping event.
- */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceScanRequest implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  @NotBlank(message = "Badge number is mandatory")
-  private String badgeNumber;
+    @NotBlank(message = "Badge number is mandatory")
+    private String badgeNumber;
 
-  @NotBlank(message = "Lesson ID is mandatory")
-  private String lessonId;
+    @NotBlank(message = "Lesson ID is mandatory")
+    private String lessonId;
 }
