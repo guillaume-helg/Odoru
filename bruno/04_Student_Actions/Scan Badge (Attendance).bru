@@ -5,24 +5,15 @@ meta {
 }
 
 post {
-  url: {{gateway_url}}/api/badges/scan
+  url: {{gateway_url}}/api/badges/scan?badgeNumber=BADGE-123-456&lessonId={{created_lesson_id}}
   body: none
   auth: bearer
-}
-
-params:query {
-  badgeNumber: {{random_badge_number}}
-  lessonId: {{created_lesson_id}}
 }
 
 auth:bearer {
   token: {{student_token}}
 }
 
-vars:pre-request {
-  random_badge_number: 1
-  created_lesson_id: 6a2ec8a7b6a19aa569f455f0
-}
 
 docs {
   Simulates a student scanning their badge at a dance studio.

@@ -1,0 +1,20 @@
+meta {
+  name: Designate Teacher copy
+  type: http
+  seq: 8
+}
+
+patch {
+  url: {{gateway_url}}/api/members/{{created_teacher_id}}/expertise?level=3
+  body: none
+  auth: bearer
+}
+
+params:query {
+  level: 3
+}
+
+auth:bearer {
+  token: {{secretary_token}}
+}
+

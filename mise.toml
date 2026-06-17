@@ -35,3 +35,8 @@ mvn -f odoru-stats-service/pom.xml checkstyle:check
 [tasks.ci]
 description = "Run local CI pipeline with Dagger"
 run = "python ci.py"
+
+[tasks.test-e2e]
+description = "Run end-to-end API tests using Bruno"
+env = { MISE_NO_INSTALL = "1" }
+run = "cd bruno && npx -y @usebruno/cli run --env Local"

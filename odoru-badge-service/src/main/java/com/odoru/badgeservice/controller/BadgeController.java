@@ -90,6 +90,7 @@ public class BadgeController {
   }
 
   @PostMapping("/scan")
+  @PreAuthorize("hasRole('STUDENT')")
   @Operation(
       summary = "Simulate a badge scan",
       description = "Queues a student presence scan event for asynchronous "

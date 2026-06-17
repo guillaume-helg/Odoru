@@ -1,0 +1,25 @@
+meta {
+  name: List Members - All
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{gateway_url}}/api/members
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~feePaid: false
+  ~medicalCertificateProvided: true
+  ~registrationValidated: true
+}
+
+auth:bearer {
+  token: {{president_token}}
+}
+
+docs {
+  Lists all members without filters.
+}
