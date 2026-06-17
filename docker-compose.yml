@@ -21,6 +21,9 @@ services:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
       - KC_HEALTH_ENABLED=true
+      - KC_HOSTNAME_URL=http://localhost:9090
+      - KC_HOSTNAME_STRICT=false
+      - KC_HOSTNAME_STRICT_HTTPS=false
     volumes:
       - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
     healthcheck:
@@ -35,12 +38,15 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    restart: always
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 20s
+      start_period: 90s
 
   member-service:
     build:
@@ -52,17 +58,18 @@ services:
       - MONGODB_HOST=mongodb
       - KEYCLOAK_HOST=keycloak
       - KEYCLOAK_PORT=8080
+      - JAVA_TOOL_OPTIONS=-Xms128m -Xmx256m
     depends_on:
       mongodb:
         condition: service_healthy
       keycloak:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 40s
+      test: ["CMD", "sh", "-c", "nc -z localhost 8080"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
 
   lesson-service:
     build:
@@ -75,6 +82,7 @@ services:
       - MEMBER_SERVICE_HOST=member-service
       - KEYCLOAK_HOST=keycloak
       - KEYCLOAK_PORT=8080
+      - JAVA_TOOL_OPTIONS=-Xms128m -Xmx256m
     depends_on:
       mongodb:
         condition: service_healthy
@@ -83,11 +91,11 @@ services:
       keycloak:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8081"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 40s
+      test: ["CMD", "sh", "-c", "nc -z localhost 8081"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 25s
 
   competition-service:
     build:
@@ -100,6 +108,7 @@ services:
       - MEMBER_SERVICE_HOST=member-service
       - KEYCLOAK_HOST=keycloak
       - KEYCLOAK_PORT=8080
+      - JAVA_TOOL_OPTIONS=-Xms128m -Xmx256m
     depends_on:
       mongodb:
         condition: service_healthy
@@ -108,11 +117,11 @@ services:
       keycloak:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8082"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 40s
+      test: ["CMD", "sh", "-c", "nc -z localhost 8082"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 25s
 
   badge-service:
     build:
@@ -128,6 +137,7 @@ services:
       - KEYCLOAK_PORT=8080
       - SPRING_RABBITMQ_HOST=rabbitmq
       - SPRING_RABBITMQ_PORT=5672
+      - JAVA_TOOL_OPTIONS=-Xms128m -Xmx256m
     depends_on:
       mongodb:
         condition: service_healthy
@@ -140,11 +150,11 @@ services:
       rabbitmq:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8083"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 40s
+      test: ["CMD", "sh", "-c", "nc -z localhost 8083"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 25s
 
   stats-service:
     build:
@@ -159,6 +169,7 @@ services:
       - BADGE_SERVICE_HOST=badge-service
       - KEYCLOAK_HOST=keycloak
       - KEYCLOAK_PORT=8080
+      - JAVA_TOOL_OPTIONS=-Xms128m -Xmx256m
     depends_on:
       member-service:
         condition: service_healthy
@@ -171,11 +182,11 @@ services:
       keycloak:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8084"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 40s
+      test: ["CMD", "sh", "-c", "nc -z localhost 8084"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 25s
 
   krakend:
     image: devopsfaith/krakend:2.7.0
@@ -197,3 +208,4 @@ services:
 
 volumes:
   mongo-data:
+  rabbitmq-data:
